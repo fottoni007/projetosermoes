@@ -15,6 +15,7 @@ export type PastorProfile = {
   contact_email: string;
   status: "pending" | "approved" | "rejected";
   rejection_reason: string | null;
+  auto_approve_revoked: boolean;
   created_at: string;
   updated_at: string;
 };
