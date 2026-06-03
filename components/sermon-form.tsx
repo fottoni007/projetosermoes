@@ -11,6 +11,7 @@ type SermonFormProps = {
   action: (prev: SermonFormState, formData: FormData) => Promise<SermonFormState>;
   initialValues?: Sermon;
   submitLabel: string;
+  deleteButton?: React.ReactNode;
 };
 
 const initialState: SermonFormState = { message: "" };
@@ -20,7 +21,7 @@ const inputClass =
 const labelTextClass = "text-sm font-medium text-ink";
 const errorClass = "mt-1 block text-sm text-clay";
 
-export default function SermonForm({ action, initialValues, submitLabel }: SermonFormProps) {
+export default function SermonForm({ action, initialValues, submitLabel, deleteButton }: SermonFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
   const [fileName, setFileName] = useState<string>(
     initialValues?.pdf_path ? "PDF já anexado" : ""
@@ -93,9 +94,12 @@ export default function SermonForm({ action, initialValues, submitLabel }: Sermo
           {fe("notes") && <span className={errorClass}>{fe("notes")}</span>}
         </label>
 
-        {/* PDF Upload — obrigatório */}
+        {/* PDF Upload */}
         <div className="block sm:col-span-2">
-          <span className={labelTextClass}>Ficheiro PDF * <span className="font-normal text-ink/50">(obrigatório, máx. 15 MB)</span></span>
+          <span className={labelTextClass}>
+            Ficheiro PDF *{" "}
+            <span className="font-normal text-ink/50">(obrigatório, máx. 15 MB)</span>
+          </span>
           <label className="mt-2 flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-ink/20 bg-mist/40 px-4 py-5 text-center text-sm text-ink/65 transition hover:border-olive/50 hover:bg-olive/5">
             <Upload className="mb-2 text-olive" size={22} />
             {fileName
@@ -108,15 +112,12 @@ export default function SermonForm({ action, initialValues, submitLabel }: Sermo
               type="file"
               accept="application/pdf"
               required={!initialValues?.pdf_path}
-              onChange={(e) => {
-                const f = e.target.files?.[0];
-                setFileName(f ? f.name : "");
-              }}
+              onChange={(e) => setFileName(e.target.files?.[0]?.name ?? "")}
             />
           </label>
           {fe("pdf") && <span className={errorClass}>{fe("pdf")}</span>}
           <p className="mt-1.5 text-xs text-ink/45">
-            O PDF será verificado contra malware e analisado por IA para gerar um resumo automático. PDFs com hiperlinks não são aceites.
+            O PDF será verificado contra malware e analisado por IA. PDFs com hiperlinks não são aceites.
           </p>
         </div>
       </div>
@@ -131,14 +132,20 @@ export default function SermonForm({ action, initialValues, submitLabel }: Sermo
         </p>
       )}
 
-      <button
-        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-olive px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-olive/90 disabled:opacity-60 sm:w-auto"
-        disabled={isPending}
-        type="submit"
-      >
-        <Save size={17} />
-        {isPending ? "A verificar e guardar…" : submitLabel}
-      </button>
+      {/* Action buttons */}
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <button
+          className="inline-flex items-center justify-center gap-2 rounded-md bg-olive px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-olive/90 disabled:opacity-60"
+          disabled={isPending}
+          type="submit"
+        >
+          <Save size={17} />
+          {isPending ? "A verificar e guardar…" : submitLabel}
+        </button>
+
+        {/* Delete button rendered outside form to avoid nested forms */}
+        {deleteButton && <>{deleteButton}</>}
+      </div>
     </form>
   );
 }
