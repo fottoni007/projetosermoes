@@ -10,6 +10,7 @@ export type Sermon = {
   notes: string;
   pdf_path: string | null;
   status: SermonStatus;
+  ai_summary: string | null;
   created_at: string;
   updated_at: string;
   created_by: string;
