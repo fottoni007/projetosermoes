@@ -1,9 +1,10 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import DeleteSermonButton from "@/components/delete-sermon-button";
 import SermonForm from "@/components/sermon-form";
 import { isAdminUser } from "@/lib/auth";
-import { getCurrentUser, getSermon, updateSermon } from "@/lib/sermons";
+import { getCurrentUser, getSermon, updateSermon, deleteSermon } from "@/lib/sermons";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -22,7 +23,8 @@ export default async function EditSermonPage({ params }: Props) {
 
   if (!admin && !isAuthor) redirect("/sermoes");
 
-  const action = updateSermon.bind(null, id);
+  const updateAction = updateSermon.bind(null, id);
+  const deleteAction = deleteSermon.bind(null, id);
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
@@ -38,10 +40,16 @@ export default async function EditSermonPage({ params }: Props) {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">Editar sermão</h1>
         <p className="mt-2 text-sm leading-6 text-ink/65">
-          Actualiza os dados do sermão. Se enviares um novo PDF, será analisado por IA.
+          Actualiza os dados do sermão. Se enviares um novo PDF, será verificado e analisado por IA.
         </p>
       </div>
-      <SermonForm action={action} initialValues={sermon} submitLabel="Guardar alterações" />
+
+      <SermonForm
+        action={updateAction}
+        initialValues={sermon}
+        submitLabel="Guardar alterações"
+        deleteButton={<DeleteSermonButton action={deleteAction} />}
+      />
     </section>
   );
 }
