@@ -34,11 +34,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       <section className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-5xl flex-col justify-center">
         <div className="mb-8 max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-olive">
-            Pastor Fabrício Ottoni
+            Servos Fiéis
           </p>
-          <h1 className="mt-3 text-3xl font-semibold text-ink">Biblioteca de sermões</h1>
+          <h1 className="mt-3 text-3xl font-semibold text-ink">Recursos úteis para a pregação</h1>
           <p className="mt-3 text-sm leading-6 text-ink/70">
-            Acesso interno para guardar, pesquisar e consultar mensagens pastorais.
+            Acesso interno para guardar, pesquisar e consultar mensagens pastorais e outros recursos.
           </p>
         </div>
 
