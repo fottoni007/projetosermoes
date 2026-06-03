@@ -5,6 +5,8 @@ import { isAdminUser } from "@/lib/auth";
 import { hasSupabaseConfig } from "@/lib/config";
 import { getCurrentUser } from "@/lib/sermons";
 
+export const dynamic = "force-dynamic";
+
 export default async function SermonsLayout({
   children
 }: Readonly<{
