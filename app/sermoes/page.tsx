@@ -1,3 +1,5 @@
+import { getCurrentUser } from "@/lib/sermons";
+import { isAdminUser } from "@/lib/auth";
 import { listSermons } from "@/lib/sermons";
 import SermonList from "@/components/sermon-list";
 import SearchBox from "@/components/search-box";
@@ -5,14 +7,15 @@ import SearchBox from "@/components/search-box";
 export const dynamic = "force-dynamic";
 
 type SermonsPageProps = {
-  searchParams: Promise<{
-    q?: string;
-  }>;
+  searchParams: Promise<{ q?: string }>;
 };
 
 export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   const params = await searchParams;
-  const sermons = await listSermons(params.q);
+  const [sermons, user] = await Promise.all([
+    listSermons(params.q),
+    getCurrentUser(),
+  ]);
 
   return (
     <section className="mx-auto max-w-6xl px-6 py-8">
@@ -26,7 +29,11 @@ export default async function SermonsPage({ searchParams }: SermonsPageProps) {
         <SearchBox defaultValue={params.q ?? ""} />
       </div>
 
-      <SermonList query={params.q} sermons={sermons} />
+      <SermonList
+        query={params.q}
+        sermons={sermons}
+        currentUserId={user?.id}
+      />
     </section>
   );
 }
