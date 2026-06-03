@@ -6,34 +6,24 @@ import SearchBox from "@/components/search-box";
 
 export const dynamic = "force-dynamic";
 
-type SermonsPageProps = {
-  searchParams: Promise<{ q?: string }>;
-};
+type SermonsPageProps = { searchParams: Promise<{ q?: string }> };
 
 export default async function SermonsPage({ searchParams }: SermonsPageProps) {
   const params = await searchParams;
-  const [sermons, user] = await Promise.all([
-    listSermons(params.q),
-    getCurrentUser(),
-  ]);
+  const [sermons, user] = await Promise.all([listSermons(params.q), getCurrentUser()]);
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-8">
-      <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <section className="px-4 py-6 sm:px-6 sm:py-8">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-ink">Biblioteca de sermões</h1>
-          <p className="mt-2 text-sm leading-6 text-ink/70">
-            Pesquisa mensagens por título, passagem bíblica, tema da série ou notas.
+          <h1 className="text-2xl font-bold text-ink sm:text-3xl">Biblioteca de sermões</h1>
+          <p className="mt-1.5 text-sm leading-6 text-ink/65">
+            Pesquisa por título, passagem bíblica, tema da série ou notas.
           </p>
         </div>
         <SearchBox defaultValue={params.q ?? ""} />
       </div>
-
-      <SermonList
-        query={params.q}
-        sermons={sermons}
-        currentUserId={user?.id}
-      />
+      <SermonList query={params.q} sermons={sermons} currentUserId={user?.id} />
     </section>
   );
 }
