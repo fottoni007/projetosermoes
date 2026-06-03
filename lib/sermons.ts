@@ -111,8 +111,7 @@ export async function createSermon(
   const admin = isAdminUser(user);
   if (!admin && !(await isApprovedPastor())) return { message: "O teu perfil de pastor ainda não foi aprovado." };
 
-  const arrayBuffer = await pdf.arrayBuffer();
-  const pdfBuffer = Buffer.from(arrayBuffer);
+  const pdfBuffer = Buffer.from(await pdf.arrayBuffer());
 
   const vtResult = await scanPdfBuffer(pdfBuffer);
   if (!vtResult.safe) return { message: vtResult.message };
@@ -191,21 +190,30 @@ export async function updateSermon(
   return { message: "Sermão actualizado com sucesso." };
 }
 
-export async function deleteSermon(id: string): Promise<void> {
+/**
+ * Apaga um sermão. Não faz redirect — o cliente fica responsável pela navegação.
+ * Retorna { success: true } ou { success: false, error: string }.
+ */
+export async function deleteSermon(id: string): Promise<{ success: boolean; error?: string }> {
   "use server";
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return;
+  if (!user) return { success: false, error: "Não autenticado." };
 
   const admin = isAdminUser(user);
   if (!admin) {
-    const { data: sermon } = await supabase.from("sermons").select("created_by").eq("id", id).maybeSingle();
-    if (!sermon || sermon.created_by !== user.id) return;
+    const { data: sermon } = await supabase
+      .from("sermons").select("created_by").eq("id", id).maybeSingle();
+    if (!sermon || sermon.created_by !== user.id) {
+      return { success: false, error: "Sem permissão." };
+    }
   }
 
-  await supabase.from("sermons").delete().eq("id", id);
+  const { error } = await supabase.from("sermons").delete().eq("id", id);
+  if (error) return { success: false, error: error.message };
+
   revalidatePath("/sermoes");
-  redirect("/sermoes");
+  return { success: true };
 }
 
 export async function approveSermon(id: string): Promise<void> {
