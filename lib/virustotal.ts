@@ -13,7 +13,7 @@ export async function scanPdfBuffer(buffer: Buffer): Promise<VtResult> {
 
   const hash = createHash("sha256").update(buffer).digest("hex");
 
-  // 1. Hash lookup (instant)
+  // 1. Hash lookup (instant — covers known threats without upload latency)
   try {
     const res = await fetch(`${VT_BASE}/files/${hash}`, {
       headers: { "x-apikey": apiKey },
@@ -33,7 +33,6 @@ export async function scanPdfBuffer(buffer: Buffer): Promise<VtResult> {
       return { safe: true, message: "" };
     }
 
-    // 2. Not in VT database — upload and quick poll
     if (res.status === 404) {
       return await uploadAndScan(buffer, apiKey);
     }
@@ -46,10 +45,12 @@ export async function scanPdfBuffer(buffer: Buffer): Promise<VtResult> {
 
 async function uploadAndScan(buffer: Buffer, apiKey: string): Promise<VtResult> {
   try {
+    // Copy buffer data into a clean ArrayBuffer to satisfy TypeScript strict types
+    const ab = new ArrayBuffer(buffer.byteLength);
+    new Uint8Array(ab).set(buffer);
+
     const formData = new FormData();
-    // Convert Buffer to Uint8Array for Blob compatibility
-    const uint8 = new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-    formData.append("file", new Blob([uint8], { type: "application/pdf" }), "sermon.pdf");
+    formData.append("file", new Blob([ab], { type: "application/pdf" }), "sermon.pdf");
 
     const upload = await fetch(`${VT_BASE}/files`, {
       method: "POST",
@@ -69,10 +70,8 @@ async function uploadAndScan(buffer: Buffer, apiKey: string): Promise<VtResult> 
         headers: { "x-apikey": apiKey },
         signal: AbortSignal.timeout(4000),
       });
-
       if (!analysis.ok) continue;
       const aData = await analysis.json();
-
       if (aData.data.attributes.status === "completed") {
         const stats = aData.data.attributes.stats ?? {};
         const malicious = (stats.malicious ?? 0) + (stats.suspicious ?? 0);
@@ -86,7 +85,7 @@ async function uploadAndScan(buffer: Buffer, apiKey: string): Promise<VtResult> 
       }
     }
   } catch {
-    // Timeout or error — allow
+    // Timeout or network error — allow
   }
 
   return { safe: true, message: "" };
