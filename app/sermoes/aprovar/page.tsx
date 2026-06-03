@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { CheckCircle, Clock, User, XCircle } from "lucide-react";
-import AdminPastorsTable from "@/components/admin-pastors-table";
 import {
   approvePastorProfile,
   rejectPastorProfile,
@@ -38,7 +37,7 @@ export default async function AprovarPage() {
 
         {pendingProfiles.length === 0 ? (
           <div className="rounded-xl border border-dashed border-ink/20 bg-white p-8 text-center text-sm text-ink/50">
-            Nenhum perfil pendente.
+            Nenhum perfil pendente. ✓
           </div>
         ) : (
           <div className="grid gap-4">
@@ -104,7 +103,7 @@ export default async function AprovarPage() {
 
         {pendingSermons.length === 0 ? (
           <div className="rounded-xl border border-dashed border-ink/20 bg-white p-8 text-center text-sm text-ink/50">
-            Nenhum sermão pendente.
+            Nenhum sermão pendente. ✓
           </div>
         ) : (
           <div className="grid gap-4">
@@ -145,17 +144,6 @@ export default async function AprovarPage() {
             ))}
           </div>
         )}
-      </div>
-
-      {/* ── Todos os pastores ── */}
-      <div>
-        <div className="mb-4">
-          <h2 className="text-xl font-bold text-ink sm:text-2xl">Todos os pastores</h2>
-          <p className="mt-1 text-sm text-ink/55">
-            Registo completo · Exportável em CSV/Excel ou PDF
-          </p>
-        </div>
-        <AdminPastorsTable profiles={allProfiles} />
       </div>
 
     </section>
