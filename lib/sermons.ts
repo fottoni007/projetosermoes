@@ -2,6 +2,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isAdminUser } from "@/lib/auth";
 import { isApprovedPastor } from "@/lib/pastor-profiles";
+import { analyzePdf } from "@/lib/ai";
+import { scanPdfBuffer } from "@/lib/virustotal";
 import { createClient } from "@/lib/supabase/server";
 import { sermonSchema } from "@/lib/validations";
 import type { Sermon, SermonFormState } from "@/types/sermon";
@@ -16,22 +18,18 @@ function formDataToObject(formData: FormData) {
     biblical_text: String(formData.get("biblical_text") ?? ""),
     series_theme: String(formData.get("series_theme") ?? ""),
     notes: String(formData.get("notes") ?? ""),
-    pdf: formData.get("pdf") instanceof File ? formData.get("pdf") : undefined
+    pdf: formData.get("pdf") instanceof File ? formData.get("pdf") : undefined,
   };
 }
 
-async function uploadPdf(userId: string, sermonId: string, file?: File) {
-  if (!file || file.size === 0) return null;
-
+async function uploadPdf(userId: string, sermonId: string, file: File) {
   const supabase = await createClient();
   const extension = file.name.split(".").pop() ?? "pdf";
   const path = `${userId}/${sermonId}/${Date.now()}.${extension}`;
-
   const { error } = await supabase.storage.from(bucketName).upload(path, file, {
     contentType: "application/pdf",
-    upsert: true
+    upsert: true,
   });
-
   if (error) throw new Error(error.message);
   return path;
 }
@@ -46,10 +44,7 @@ export async function listSermons(query?: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  let request = supabase
-    .from("sermons")
-    .select("*")
-    .order("date", { ascending: false });
+  let request = supabase.from("sermons").select("*").order("date", { ascending: false });
 
   if (!isAdminUser(user)) {
     if (user) {
@@ -59,9 +54,9 @@ export async function listSermons(query?: string) {
     }
   }
 
-  const trimmedQuery = query?.trim().replace(/[(),]/g, " ");
-  if (trimmedQuery) {
-    const term = `%${trimmedQuery}%`;
+  const trimmed = query?.trim().replace(/[(),]/g, " ");
+  if (trimmed) {
+    const term = `%${trimmed}%`;
     request = request.or(
       `title.ilike.${term},preacher_name.ilike.${term},biblical_text.ilike.${term},series_theme.ilike.${term},notes.ilike.${term}`
     );
@@ -74,12 +69,7 @@ export async function listSermons(query?: string) {
 
 export async function getSermon(id: string) {
   const supabase = await createClient();
-  const { data, error } = await supabase
-    .from("sermons")
-    .select("*")
-    .eq("id", id)
-    .single();
-
+  const { data, error } = await supabase.from("sermons").select("*").eq("id", id).single();
   if (error) throw new Error(error.message);
   return data as Sermon;
 }
@@ -91,6 +81,26 @@ export async function getPdfUrl(path: string | null) {
   return data?.signedUrl ?? null;
 }
 
+async function shouldAutoApprove(userId: string): Promise<boolean> {
+  const supabase = await createClient();
+
+  const { data: profile } = await supabase
+    .from("pastor_profiles")
+    .select("auto_approve_revoked")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (profile?.auto_approve_revoked) return false;
+
+  const { count } = await supabase
+    .from("sermons")
+    .select("id", { count: "exact", head: true })
+    .eq("created_by", userId)
+    .eq("status", "published");
+
+  return (count ?? 0) >= 3;
+}
+
 export async function createSermon(
   _prev: SermonFormState,
   formData: FormData
@@ -99,10 +109,14 @@ export async function createSermon(
 
   const parsed = sermonSchema.safeParse(formDataToObject(formData));
   if (!parsed.success) {
-    return {
-      message: "Revê os campos assinalados.",
-      errors: parsed.error.flatten().fieldErrors
-    };
+    return { message: "Revê os campos assinalados.", errors: parsed.error.flatten().fieldErrors };
+  }
+
+  const { pdf, ...sermon } = parsed.data;
+
+  // PDF is mandatory
+  if (!pdf || pdf.size === 0) {
+    return { message: "O envio de PDF é obrigatório." };
   }
 
   const supabase = await createClient();
@@ -111,33 +125,39 @@ export async function createSermon(
 
   const admin = isAdminUser(user);
   const approved = admin || (await isApprovedPastor());
+  if (!approved) return { message: "O teu perfil de pastor ainda não foi aprovado." };
 
-  if (!approved) {
-    return { message: "O teu perfil de pastor ainda não foi aprovado." };
+  // Convert PDF to buffer for analysis
+  const arrayBuffer = await pdf.arrayBuffer();
+  const pdfBuffer = Buffer.from(arrayBuffer);
+
+  // VirusTotal security scan
+  const vtResult = await scanPdfBuffer(pdfBuffer);
+  if (!vtResult.safe) return { message: vtResult.message };
+
+  // Claude AI: link check + summary
+  const aiResult = await analyzePdf(pdfBuffer);
+  if (aiResult.hasLinks) {
+    return { message: "O PDF contém hiperlinks. Por segurança, não são permitidos PDFs com links. Remove os links e tenta novamente." };
   }
 
-  const { pdf, ...sermon } = parsed.data;
-  const status = admin ? "published" : "pending";
+  // Auto-approval or pending
+  const autoApprove = admin ? true : await shouldAutoApprove(user.id);
+  const status = autoApprove ? "published" : "pending";
 
   const { data, error } = await supabase
     .from("sermons")
-    .insert({ ...sermon, created_by: user.id, status })
+    .insert({ ...sermon, created_by: user.id, status, ai_summary: aiResult.summary })
     .select("id")
     .single();
 
   if (error) return { message: error.message };
 
-  if (pdf && pdf.size > 0) {
-    try {
-      const pdfPath = await uploadPdf(user.id, data.id, pdf);
-      await supabase.from("sermons").update({ pdf_path: pdfPath }).eq("id", data.id);
-    } catch (err) {
-      return {
-        message: err instanceof Error
-          ? err.message
-          : "O sermão foi criado, mas não foi possível guardar o PDF."
-      };
-    }
+  try {
+    const pdfPath = await uploadPdf(user.id, data.id, pdf);
+    await supabase.from("sermons").update({ pdf_path: pdfPath }).eq("id", data.id);
+  } catch (err) {
+    return { message: err instanceof Error ? err.message : "Erro ao guardar o PDF." };
   }
 
   revalidatePath("/sermoes");
@@ -153,10 +173,7 @@ export async function updateSermon(
 
   const parsed = sermonSchema.safeParse(formDataToObject(formData));
   if (!parsed.success) {
-    return {
-      message: "Revê os campos assinalados.",
-      errors: parsed.error.flatten().fieldErrors
-    };
+    return { message: "Revê os campos assinalados.", errors: parsed.error.flatten().fieldErrors };
   }
 
   const supabase = await createClient();
@@ -173,18 +190,28 @@ export async function updateSermon(
 
   const { pdf, ...sermon } = parsed.data;
   let pdfPath: string | null = null;
+  let aiSummary: string | null | undefined = undefined;
 
   if (pdf && pdf.size > 0) {
-    try {
-      pdfPath = await uploadPdf(user.id, id, pdf);
-    } catch (err) {
-      return {
-        message: err instanceof Error ? err.message : "Não foi possível guardar o PDF."
-      };
+    const arrayBuffer = await pdf.arrayBuffer();
+    const pdfBuffer = Buffer.from(arrayBuffer);
+
+    const vtResult = await scanPdfBuffer(pdfBuffer);
+    if (!vtResult.safe) return { message: vtResult.message };
+
+    const aiResult = await analyzePdf(pdfBuffer);
+    if (aiResult.hasLinks) {
+      return { message: "O PDF contém hiperlinks. Remove os links e tenta novamente." };
     }
+
+    aiSummary = aiResult.summary;
+    pdfPath = await uploadPdf(user.id, id, pdf).catch(() => null);
   }
 
-  const payload = pdfPath ? { ...sermon, pdf_path: pdfPath } : sermon;
+  const payload: Record<string, unknown> = { ...sermon };
+  if (pdfPath) payload.pdf_path = pdfPath;
+  if (aiSummary !== undefined) payload.ai_summary = aiSummary;
+
   const { error } = await supabase.from("sermons").update(payload).eq("id", id);
   if (error) return { message: error.message };
 
@@ -198,7 +225,6 @@ export async function approveSermon(id: string): Promise<void> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !isAdminUser(user)) return;
-
   await supabase.from("sermons").update({ status: "published" }).eq("id", id);
   revalidatePath("/sermoes");
   revalidatePath("/sermoes/aprovar");
@@ -209,7 +235,6 @@ export async function rejectSermon(id: string): Promise<void> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !isAdminUser(user)) return;
-
   await supabase.from("sermons").update({ status: "rejected" }).eq("id", id);
   revalidatePath("/sermoes");
   revalidatePath("/sermoes/aprovar");
@@ -219,12 +244,7 @@ export async function listPendingSermons(): Promise<Sermon[]> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user || !isAdminUser(user)) return [];
-
   const { data } = await supabase
-    .from("sermons")
-    .select("*")
-    .eq("status", "pending")
-    .order("created_at", { ascending: true });
-
+    .from("sermons").select("*").eq("status", "pending").order("created_at", { ascending: true });
   return (data ?? []) as Sermon[];
 }
