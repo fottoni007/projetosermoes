@@ -3,6 +3,8 @@ import SermonForm from "@/components/sermon-form";
 import { isAdminUser } from "@/lib/auth";
 import { createSermon, getCurrentUser } from "@/lib/sermons";
 
+export const dynamic = "force-dynamic";
+
 export default async function NewSermonPage() {
   const user = await getCurrentUser();
 
