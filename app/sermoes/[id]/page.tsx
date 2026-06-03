@@ -1,9 +1,8 @@
 import { ArrowLeft, BookOpen, Calendar, Edit, FileText, Sparkles, UserRound } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import DeleteSermonButton from "@/components/delete-sermon-button";
 import { isAdminUser } from "@/lib/auth";
-import { getCurrentUser, getSermon, getPdfUrl, deleteSermon } from "@/lib/sermons";
+import { getCurrentUser, getSermon, getPdfUrl } from "@/lib/sermons";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -32,8 +31,6 @@ export default async function SermonDetailPage({ params }: Props) {
   };
   const statusInfo = statusMap[sermon.status];
 
-  const deleteAction = deleteSermon.bind(null, id);
-
   return (
     <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
 
@@ -53,16 +50,13 @@ export default async function SermonDetailPage({ params }: Props) {
             </span>
           )}
           {canEdit && (
-            <>
-              <Link
-                href={`/sermoes/${sermon.id}/editar`}
-                className="inline-flex items-center gap-2 rounded-md border border-ink/10 bg-white px-3 py-2 text-sm font-medium text-ink transition hover:border-olive/30 hover:text-olive"
-              >
-                <Edit size={15} />
-                Editar
-              </Link>
-              <DeleteSermonButton action={deleteAction} />
-            </>
+            <Link
+              href={`/sermoes/${sermon.id}/editar`}
+              className="inline-flex items-center gap-2 rounded-md border border-ink/10 bg-white px-3 py-2 text-sm font-medium text-ink transition hover:border-olive/30 hover:text-olive"
+            >
+              <Edit size={15} />
+              Editar
+            </Link>
           )}
         </div>
       </div>
