@@ -47,7 +47,9 @@ export async function scanPdfBuffer(buffer: Buffer): Promise<VtResult> {
 async function uploadAndScan(buffer: Buffer, apiKey: string): Promise<VtResult> {
   try {
     const formData = new FormData();
-    formData.append("file", new Blob([buffer], { type: "application/pdf" }), "sermon.pdf");
+    // Convert Buffer to Uint8Array for Blob compatibility
+    const uint8 = new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
+    formData.append("file", new Blob([uint8], { type: "application/pdf" }), "sermon.pdf");
 
     const upload = await fetch(`${VT_BASE}/files`, {
       method: "POST",
