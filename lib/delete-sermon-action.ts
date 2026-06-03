@@ -28,9 +28,21 @@ export async function deleteSermonAction(
     }
   }
 
-  const { error } = await supabase.from("sermons").delete().eq("id", id);
+  // .select() devolve as linhas apagadas — permite verificar que algo foi de facto removido.
+  const { data, error } = await supabase
+    .from("sermons")
+    .delete()
+    .eq("id", id)
+    .select();
 
   if (error) return { success: false, error: error.message };
+
+  if (!data || data.length === 0) {
+    return {
+      success: false,
+      error: "O sermão não foi apagado. Verifica as permissões ou se o registo ainda existe.",
+    };
+  }
 
   revalidatePath("/sermoes");
   return { success: true };
