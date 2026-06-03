@@ -37,7 +37,7 @@ export default function PastorProfileForm({ existing }: Props) {
       full_name: existing?.full_name ?? "",
       church_name: existing?.church_name ?? "",
       address: existing?.address ?? "",
-      years_of_ministry: existing?.years_of_ministry?.toString() as unknown as number ?? "",
+      years_of_ministry: existing?.years_of_ministry ?? 0,
       pastor_type: existing?.pastor_type ?? "senior",
       academic_background: existing?.academic_background ?? "",
       instagram_url: existing?.instagram_url ?? "",
@@ -123,7 +123,7 @@ export default function PastorProfileForm({ existing }: Props) {
 
           <label className={labelClass}>
             <span className={labelTextClass}>Tempo de pastorado (anos) *</span>
-            <input className={inputClass} {...register("years_of_ministry")} name="years_of_ministry" type="number" min="0" max="80" />
+            <input className={inputClass} {...register("years_of_ministry", { valueAsNumber: true })} name="years_of_ministry" type="number" min="0" max="80" />
             {fe("years_of_ministry") && <span className={errorClass}>{fe("years_of_ministry")}</span>}
           </label>
 
