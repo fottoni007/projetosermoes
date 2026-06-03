@@ -22,20 +22,15 @@ export const sermonSchema = z.object({
 
 export type SermonInput = z.infer<typeof sermonSchema>;
 
-const COUNTRY_CODES = [
-  "+351", "+55", "+1", "+44", "+34", "+33", "+49", "+39", "+351",
-  "+244", "+258", "+238", "+239", "+245", "+670"
-];
-
 export const pastorProfileSchema = z.object({
   full_name: z.string().trim().min(3, "Indique o nome completo."),
   church_name: z.string().trim().min(2, "Indique o nome da igreja."),
   address: z.string().trim().min(5, "Indique a morada completa."),
-  years_of_ministry: z
-    .string()
-    .min(1, "Indique o tempo de pastorado.")
-    .transform(Number)
-    .pipe(z.number().int().min(0, "Valor inválido.").max(80, "Valor inválido.")),
+  years_of_ministry: z.coerce
+    .number({ invalid_type_error: "Indique o tempo de pastorado." })
+    .int()
+    .min(0, "Valor inválido.")
+    .max(80, "Valor inválido."),
   pastor_type: z.enum(["senior", "colaborador"], {
     errorMap: () => ({ message: "Seleccione o tipo de pastor." })
   }),
