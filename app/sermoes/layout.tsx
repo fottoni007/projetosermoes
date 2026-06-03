@@ -1,6 +1,7 @@
-import { BookOpen, CheckSquare, LogOut, Plus, UserCircle } from "lucide-react";
+import { BookOpen, CheckSquare, LogOut, Plus, UserCircle, Users } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import TabNav from "@/components/tab-nav";
 import { isAdminUser } from "@/lib/auth";
 import { hasSupabaseConfig } from "@/lib/config";
 import { getMyPastorProfile, isApprovedPastor, listPendingPastorProfiles } from "@/lib/pastor-profiles";
@@ -43,6 +44,23 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
     : profile.status === "rejected"
     ? "Perfil — Revisto"
     : "O meu perfil";
+
+  const tabs = admin
+    ? [
+        { href: "/sermoes", label: "Sermões", exact: true },
+        {
+          href: "/sermoes/aprovar",
+          label: "A Aprovar",
+          icon: <CheckSquare size={14} />,
+          badge: pendingCount,
+        },
+        {
+          href: "/sermoes/pastores",
+          label: "Pastores",
+          icon: <Users size={14} />,
+        },
+      ]
+    : [{ href: "/sermoes", label: "Sermões", exact: true }];
 
   return (
     <main className="min-h-screen bg-linen">
@@ -97,29 +115,8 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
             </div>
           </div>
 
-          {/* Tabs */}
-          <nav className="-mb-px flex gap-1 overflow-x-auto text-sm font-medium">
-            <Link
-              className="shrink-0 border-b-2 border-olive pb-3 pr-4 text-olive"
-              href="/sermoes"
-            >
-              Sermões
-            </Link>
-            {admin && (
-              <Link
-                className="relative inline-flex shrink-0 items-center gap-1.5 border-b-2 border-transparent pb-3 px-2 text-ink/55 transition hover:text-ink"
-                href="/sermoes/aprovar"
-              >
-                <CheckSquare size={14} />
-                A Aprovar
-                {pendingCount > 0 && (
-                  <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-clay px-1 text-xs font-bold text-white">
-                    {pendingCount}
-                  </span>
-                )}
-              </Link>
-            )}
-          </nav>
+          {/* Tabs — client component for active state */}
+          <TabNav tabs={tabs} />
         </div>
       </header>
 
