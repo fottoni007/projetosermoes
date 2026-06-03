@@ -1,4 +1,4 @@
-import { ArrowLeft, BookOpen, Calendar, Edit, FileText, Sparkles, UserRound } from "lucide-react";
+import { ArrowLeft, BookOpen, Calendar, Edit, FileText, Layers, Sparkles, Tag, UserRound } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { isAdminUser } from "@/lib/auth";
@@ -79,8 +79,9 @@ export default async function SermonDetailPage({ params }: Props) {
           </span>
         </div>
         <div className="mt-3">
-          <span className="inline-block rounded-md bg-olive/10 px-2.5 py-1 text-xs font-semibold text-olive">
-            {sermon.series_theme}
+          <span className="inline-flex items-center gap-1.5 rounded-md bg-olive/10 px-2.5 py-1 text-xs font-semibold text-olive">
+            {sermon.is_series ? <Layers size={12} /> : <Tag size={12} />}
+            {sermon.is_series ? "Série" : "Tema único"}: {sermon.series_theme}
           </span>
         </div>
       </div>
@@ -91,7 +92,7 @@ export default async function SermonDetailPage({ params }: Props) {
         <p className="whitespace-pre-wrap leading-7 text-ink/80">{sermon.notes}</p>
       </div>
 
-      {/* AI Summary */}
+      {/* AI Summary — aparece logo abaixo das Notas quando disponível */}
       {sermon.ai_summary && (
         <div className="mt-5 rounded-xl border border-olive/20 bg-olive/5 p-6 shadow-soft sm:p-8">
           <h2 className="mb-3 inline-flex items-center gap-2 text-lg font-semibold text-olive">
@@ -102,18 +103,21 @@ export default async function SermonDetailPage({ params }: Props) {
         </div>
       )}
 
-      {/* PDF */}
+      {/* PDF — botão claramente separado do título */}
       {pdfUrl && (
-        <div className="mt-5 rounded-xl border border-ink/10 bg-white p-5 shadow-soft">
-          <h2 className="mb-3 inline-flex items-center gap-2 text-lg font-semibold text-ink">
+        <div className="mt-5 rounded-xl border border-ink/10 bg-white p-6 shadow-soft">
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-ink">
             <FileText size={18} />
             Ficheiro PDF
           </h2>
+          <p className="mt-1.5 text-sm text-ink/55">
+            Documento completo do sermão para leitura ou download.
+          </p>
           <a
             href={pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-md bg-olive px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-olive/90"
+            className="mt-5 inline-flex items-center gap-2 rounded-md bg-olive px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-olive/90"
           >
             <FileText size={16} />
             Descarregar PDF
