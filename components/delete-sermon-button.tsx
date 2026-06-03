@@ -1,19 +1,27 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 
-type Props = { action: () => Promise<void> };
+type Props = { action: () => Promise<{ success: boolean; error?: string }> };
 
 export default function DeleteSermonButton({ action }: Props) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   function handleClick() {
     if (!confirm("Tens a certeza que queres apagar este sermão? Esta acção é irreversível.")) {
       return;
     }
     startTransition(async () => {
-      await action();
+      const result = await action();
+      if (result.success) {
+        router.push("/sermoes");
+        router.refresh();
+      } else {
+        alert(result.error ?? "Erro ao apagar o sermão.");
+      }
     });
   }
 
