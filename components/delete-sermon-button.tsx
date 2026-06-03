@@ -27,6 +27,7 @@ export default function DeleteSermonButton({ action }: Props) {
 
   return (
     <button
+      type="button"
       onClick={handleClick}
       disabled={isPending}
       className="inline-flex items-center gap-2 rounded-md border border-clay/30 px-3 py-2 text-sm font-medium text-clay transition hover:bg-clay/5 disabled:opacity-50"
