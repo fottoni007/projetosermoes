@@ -2,34 +2,31 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Save, Upload } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useForm } from "react-hook-form";
 import { sermonSchema, type SermonInput } from "@/lib/validations";
 import type { Sermon, SermonFormState } from "@/types/sermon";
 
 type SermonFormProps = {
-  action: (
-    previousState: SermonFormState,
-    formData: FormData
-  ) => Promise<SermonFormState>;
+  action: (prev: SermonFormState, formData: FormData) => Promise<SermonFormState>;
   initialValues?: Sermon;
   submitLabel: string;
 };
 
-const initialState: SermonFormState = {
-  message: ""
-};
+const initialState: SermonFormState = { message: "" };
 
-export default function SermonForm({
-  action,
-  initialValues,
-  submitLabel
-}: SermonFormProps) {
+const inputClass =
+  "mt-2 w-full rounded-md border border-ink/15 bg-white px-3 py-2 text-sm outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10";
+const labelTextClass = "text-sm font-medium text-ink";
+const errorClass = "mt-1 block text-sm text-clay";
+
+export default function SermonForm({ action, initialValues, submitLabel }: SermonFormProps) {
   const [state, formAction, isPending] = useActionState(action, initialState);
-  const {
-    register,
-    formState: { errors }
-  } = useForm<SermonInput>({
+  const [fileName, setFileName] = useState<string>(
+    initialValues?.pdf_path ? "PDF já anexado" : ""
+  );
+
+  const { register, formState: { errors } } = useForm<SermonInput>({
     resolver: zodResolver(sermonSchema),
     defaultValues: {
       title: initialValues?.title ?? "",
@@ -37,132 +34,110 @@ export default function SermonForm({
       date: initialValues?.date ?? "",
       biblical_text: initialValues?.biblical_text ?? "",
       series_theme: initialValues?.series_theme ?? "",
-      notes: initialValues?.notes ?? ""
-    }
+      notes: initialValues?.notes ?? "",
+    },
   });
 
-  function fieldError(name: keyof SermonInput) {
+  function fe(name: keyof SermonInput) {
     return errors[name]?.message ?? state.errors?.[name]?.[0];
   }
 
   return (
-    <form action={formAction} className="rounded-lg border border-ink/10 bg-white p-6 shadow-soft">
-      <div className="grid gap-5 md:grid-cols-2">
-        <label className="block md:col-span-2">
-          <span className="text-sm font-medium text-ink">Título</span>
-          <input
-            className="mt-2 w-full rounded-md border border-ink/15 bg-white px-3 py-2 outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10"
-            {...register("title")}
-            name="title"
-            required
-          />
-          {fieldError("title") ? (
-            <span className="mt-1 block text-sm text-clay">{fieldError("title")}</span>
-          ) : null}
+    <form action={formAction} className="rounded-xl border border-ink/10 bg-white p-5 shadow-soft sm:p-6">
+      <div className="grid gap-5 sm:grid-cols-2">
+
+        <label className="block sm:col-span-2">
+          <span className={labelTextClass}>Título *</span>
+          <input className={inputClass} {...register("title")} name="title" required />
+          {fe("title") && <span className={errorClass}>{fe("title")}</span>}
         </label>
 
-        <label className="block md:col-span-2">
-          <span className="text-sm font-medium text-ink">Nome do Pregador</span>
-          <input
-            className="mt-2 w-full rounded-md border border-ink/15 bg-white px-3 py-2 outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10"
-            {...register("preacher_name")}
-            name="preacher_name"
-            required
-          />
-          {fieldError("preacher_name") ? (
-            <span className="mt-1 block text-sm text-clay">
-              {fieldError("preacher_name")}
-            </span>
-          ) : null}
+        <label className="block sm:col-span-2">
+          <span className={labelTextClass}>Nome do Pregador *</span>
+          <input className={inputClass} {...register("preacher_name")} name="preacher_name" required />
+          {fe("preacher_name") && <span className={errorClass}>{fe("preacher_name")}</span>}
         </label>
 
         <label className="block">
-          <span className="text-sm font-medium text-ink">Data</span>
-          <input
-            className="mt-2 w-full rounded-md border border-ink/15 bg-white px-3 py-2 outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10"
-            {...register("date")}
-            name="date"
-            type="date"
-            required
-          />
-          {fieldError("date") ? (
-            <span className="mt-1 block text-sm text-clay">{fieldError("date")}</span>
-          ) : null}
+          <span className={labelTextClass}>Data *</span>
+          <input className={inputClass} {...register("date")} name="date" type="date" required />
+          {fe("date") && <span className={errorClass}>{fe("date")}</span>}
         </label>
 
         <label className="block">
-          <span className="text-sm font-medium text-ink">Texto bíblico</span>
+          <span className={labelTextClass}>Texto bíblico *</span>
           <input
-            className="mt-2 w-full rounded-md border border-ink/15 bg-white px-3 py-2 outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10"
+            className={inputClass}
             {...register("biblical_text")}
             name="biblical_text"
             placeholder="Ex.: João 15:1-8"
             required
           />
-          {fieldError("biblical_text") ? (
-            <span className="mt-1 block text-sm text-clay">
-              {fieldError("biblical_text")}
-            </span>
-          ) : null}
+          {fe("biblical_text") && <span className={errorClass}>{fe("biblical_text")}</span>}
         </label>
 
-        <label className="block md:col-span-2">
-          <span className="text-sm font-medium text-ink">Tema da série</span>
-          <input
-            className="mt-2 w-full rounded-md border border-ink/15 bg-white px-3 py-2 outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10"
-            {...register("series_theme")}
-            name="series_theme"
-            required
-          />
-          {fieldError("series_theme") ? (
-            <span className="mt-1 block text-sm text-clay">
-              {fieldError("series_theme")}
-            </span>
-          ) : null}
+        <label className="block sm:col-span-2">
+          <span className={labelTextClass}>Tema da série *</span>
+          <input className={inputClass} {...register("series_theme")} name="series_theme" required />
+          {fe("series_theme") && <span className={errorClass}>{fe("series_theme")}</span>}
         </label>
 
-        <label className="block md:col-span-2">
-          <span className="text-sm font-medium text-ink">Notas</span>
+        <label className="block sm:col-span-2">
+          <span className={labelTextClass}>Notas *</span>
           <textarea
-            className="mt-2 min-h-44 w-full rounded-md border border-ink/15 bg-white px-3 py-2 leading-7 outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10"
+            className={`${inputClass} min-h-36 leading-7`}
             {...register("notes")}
             name="notes"
             required
           />
-          {fieldError("notes") ? (
-            <span className="mt-1 block text-sm text-clay">{fieldError("notes")}</span>
-          ) : null}
+          {fe("notes") && <span className={errorClass}>{fe("notes")}</span>}
         </label>
 
-        <label className="block md:col-span-2">
-          <span className="text-sm font-medium text-ink">Ficheiro PDF</span>
-          <span className="mt-2 flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-ink/20 bg-mist/40 px-4 py-6 text-center text-sm text-ink/65 transition hover:border-olive/50 hover:bg-olive/5">
-            <Upload className="mb-2 text-olive" size={24} />
-            Selecciona um PDF até 15 MB
-            {initialValues?.pdf_path ? (
-              <span className="mt-1 text-xs text-olive">Já existe um PDF anexado.</span>
-            ) : null}
-          </span>
-          <input className="sr-only" name="pdf" type="file" accept="application/pdf" />
-          {fieldError("pdf") ? (
-            <span className="mt-1 block text-sm text-clay">{fieldError("pdf")}</span>
-          ) : null}
-        </label>
+        {/* PDF Upload — obrigatório */}
+        <div className="block sm:col-span-2">
+          <span className={labelTextClass}>Ficheiro PDF * <span className="font-normal text-ink/50">(obrigatório, máx. 15 MB)</span></span>
+          <label className="mt-2 flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-ink/20 bg-mist/40 px-4 py-5 text-center text-sm text-ink/65 transition hover:border-olive/50 hover:bg-olive/5">
+            <Upload className="mb-2 text-olive" size={22} />
+            {fileName
+              ? <span className="font-medium text-olive">{fileName}</span>
+              : <span>Clica para seleccionar um PDF</span>
+            }
+            <input
+              className="sr-only"
+              name="pdf"
+              type="file"
+              accept="application/pdf"
+              required={!initialValues?.pdf_path}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                setFileName(f ? f.name : "");
+              }}
+            />
+          </label>
+          {fe("pdf") && <span className={errorClass}>{fe("pdf")}</span>}
+          <p className="mt-1.5 text-xs text-ink/45">
+            O PDF será verificado contra malware e analisado por IA para gerar um resumo automático. PDFs com hiperlinks não são aceites.
+          </p>
+        </div>
       </div>
 
-      {state.message ? (
-        <p className="mt-5 rounded-md bg-olive/10 px-3 py-2 text-sm text-olive">
+      {state.message && (
+        <p className={`mt-5 rounded-md px-3 py-2.5 text-sm ${
+          state.message.includes("sucesso") || state.message.includes("aprovação")
+            ? "bg-olive/10 text-olive"
+            : "bg-clay/10 text-clay"
+        }`}>
           {state.message}
         </p>
-      ) : null}
+      )}
 
       <button
-        className="mt-6 inline-flex items-center justify-center gap-2 rounded-md bg-olive px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-olive/90 disabled:opacity-60"
+        className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-md bg-olive px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-olive/90 disabled:opacity-60 sm:w-auto"
         disabled={isPending}
         type="submit"
       >
-        <Save size={18} />
-        {isPending ? "A guardar..." : submitLabel}
+        <Save size={17} />
+        {isPending ? "A verificar e guardar…" : submitLabel}
       </button>
     </form>
   );
