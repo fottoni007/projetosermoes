@@ -4,7 +4,8 @@ import { notFound, redirect } from "next/navigation";
 import DeleteSermonButton from "@/components/delete-sermon-button";
 import SermonForm from "@/components/sermon-form";
 import { isAdminUser } from "@/lib/auth";
-import { getCurrentUser, getSermon, updateSermon, deleteSermon } from "@/lib/sermons";
+import { deleteSermonAction } from "@/lib/delete-sermon-action";
+import { getCurrentUser, getSermon, updateSermon } from "@/lib/sermons";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -13,7 +14,10 @@ type Props = { params: Promise<{ id: string }> };
 
 export default async function EditSermonPage({ params }: Props) {
   const { id } = await params;
-  const [user, sermon] = await Promise.all([getCurrentUser(), getSermon(id).catch(() => null)]);
+  const [user, sermon] = await Promise.all([
+    getCurrentUser(),
+    getSermon(id).catch(() => null),
+  ]);
 
   if (!user) redirect("/login");
   if (!sermon) notFound();
@@ -24,7 +28,8 @@ export default async function EditSermonPage({ params }: Props) {
   if (!admin && !isAuthor) redirect("/sermoes");
 
   const updateAction = updateSermon.bind(null, id);
-  const deleteAction = deleteSermon.bind(null, id);
+  // Usa o ficheiro dedicado com "use server" no topo — garante registo correcto
+  const deleteAction = deleteSermonAction.bind(null, id);
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
