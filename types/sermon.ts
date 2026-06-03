@@ -7,6 +7,7 @@ export type Sermon = {
   date: string;
   biblical_text: string;
   series_theme: string;
+  is_series: boolean;
   notes: string;
   pdf_path: string | null;
   status: SermonStatus;
