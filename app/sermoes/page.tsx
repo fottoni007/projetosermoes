@@ -2,6 +2,8 @@ import { listSermons } from "@/lib/sermons";
 import SermonList from "@/components/sermon-list";
 import SearchBox from "@/components/search-box";
 
+export const dynamic = "force-dynamic";
+
 type SermonsPageProps = {
   searchParams: Promise<{
     q?: string;
