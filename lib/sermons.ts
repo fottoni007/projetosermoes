@@ -16,6 +16,7 @@ function formDataToObject(formData: FormData) {
     preacher_name: String(formData.get("preacher_name") ?? ""),
     date: String(formData.get("date") ?? ""),
     biblical_text: String(formData.get("biblical_text") ?? ""),
+    is_series: String(formData.get("is_series") ?? "false") === "true",
     series_theme: String(formData.get("series_theme") ?? ""),
     notes: String(formData.get("notes") ?? ""),
     pdf: formData.get("pdf") instanceof File ? formData.get("pdf") : undefined,
@@ -188,32 +189,6 @@ export async function updateSermon(
   revalidatePath("/sermoes");
   revalidatePath(`/sermoes/${id}`);
   return { message: "Sermão actualizado com sucesso." };
-}
-
-/**
- * Apaga um sermão. Não faz redirect — o cliente fica responsável pela navegação.
- * Retorna { success: true } ou { success: false, error: string }.
- */
-export async function deleteSermon(id: string): Promise<{ success: boolean; error?: string }> {
-  "use server";
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return { success: false, error: "Não autenticado." };
-
-  const admin = isAdminUser(user);
-  if (!admin) {
-    const { data: sermon } = await supabase
-      .from("sermons").select("created_by").eq("id", id).maybeSingle();
-    if (!sermon || sermon.created_by !== user.id) {
-      return { success: false, error: "Sem permissão." };
-    }
-  }
-
-  const { error } = await supabase.from("sermons").delete().eq("id", id);
-  if (error) return { success: false, error: error.message };
-
-  revalidatePath("/sermoes");
-  return { success: true };
 }
 
 export async function approveSermon(id: string): Promise<void> {
