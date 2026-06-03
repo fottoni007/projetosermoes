@@ -33,6 +33,7 @@ export default function SermonForm({
   const [fileName, setFileName] = useState<string>(
     initialValues?.pdf_path ? "PDF já anexado" : ""
   );
+  const [isSeries, setIsSeries] = useState<boolean>(initialValues?.is_series ?? false);
 
   const {
     register,
@@ -44,6 +45,7 @@ export default function SermonForm({
       preacher_name: initialValues?.preacher_name ?? "",
       date: initialValues?.date ?? "",
       biblical_text: initialValues?.biblical_text ?? "",
+      is_series: initialValues?.is_series ?? false,
       series_theme: initialValues?.series_theme ?? "",
       notes: initialValues?.notes ?? "",
     },
@@ -55,7 +57,6 @@ export default function SermonForm({
 
   return (
     <div className="rounded-xl border border-ink/10 bg-white p-5 shadow-soft sm:p-6">
-      {/* O form NÃO contém os botões de acção — usa id para associação */}
       <form id={FORM_ID} action={formAction}>
         <div className="grid gap-5 sm:grid-cols-2">
 
@@ -89,9 +90,51 @@ export default function SermonForm({
             {fe("biblical_text") && <span className={errorClass}>{fe("biblical_text")}</span>}
           </label>
 
+          {/* Tipo: série ou tema único */}
+          <div className="sm:col-span-2">
+            <span className={labelTextClass}>Esta mensagem é *</span>
+            <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:gap-5">
+              <label className={`flex flex-1 cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition ${
+                isSeries ? "border-olive bg-olive/5 text-olive" : "border-ink/15 text-ink/70"
+              }`}>
+                <input
+                  type="radio"
+                  name="is_series"
+                  value="true"
+                  className="h-4 w-4 accent-olive"
+                  checked={isSeries}
+                  onChange={() => setIsSeries(true)}
+                />
+                Parte de uma série
+              </label>
+              <label className={`flex flex-1 cursor-pointer items-center gap-2 rounded-md border px-3 py-2 text-sm transition ${
+                !isSeries ? "border-olive bg-olive/5 text-olive" : "border-ink/15 text-ink/70"
+              }`}>
+                <input
+                  type="radio"
+                  name="is_series"
+                  value="false"
+                  className="h-4 w-4 accent-olive"
+                  checked={!isSeries}
+                  onChange={() => setIsSeries(false)}
+                />
+                Tema único
+              </label>
+            </div>
+          </div>
+
+          {/* Nome da série OU tema, conforme a escolha acima */}
           <label className="block sm:col-span-2">
-            <span className={labelTextClass}>Tema da série *</span>
-            <input className={inputClass} {...register("series_theme")} name="series_theme" required />
+            <span className={labelTextClass}>
+              {isSeries ? "Nome da série *" : "Tema da mensagem *"}
+            </span>
+            <input
+              className={inputClass}
+              {...register("series_theme")}
+              name="series_theme"
+              placeholder={isSeries ? "Ex.: Fruto do Espírito" : "Ex.: Gratidão"}
+              required
+            />
             {fe("series_theme") && <span className={errorClass}>{fe("series_theme")}</span>}
           </label>
 
@@ -148,7 +191,6 @@ export default function SermonForm({
         )}
       </form>
 
-      {/* Botões FORA do form — o submit usa form= para associar ao form acima */}
       <div className="mt-6 flex flex-wrap items-center gap-3">
         <button
           form={FORM_ID}
@@ -159,8 +201,6 @@ export default function SermonForm({
           <Save size={17} />
           {isPending ? "A verificar e guardar…" : submitLabel}
         </button>
-
-        {/* Botão de apagar: está fora do form, sem risco de submit acidental */}
         {deleteButton}
       </div>
     </div>
