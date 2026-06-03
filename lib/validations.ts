@@ -7,17 +7,18 @@ export const sermonSchema = z.object({
   preacher_name: z.string().trim().min(2, "Indique o nome do pregador."),
   date: z.string().min(1, "Indique a data do sermão."),
   biblical_text: z.string().trim().min(2, "Indique o texto bíblico principal."),
-  series_theme: z.string().trim().min(2, "Indique o tema da série."),
+  is_series: z.boolean(),
+  series_theme: z.string().trim().min(2, "Indique o tema ou o nome da série."),
   notes: z.string().trim().min(1, "Adicione pelo menos uma nota."),
   pdf: z
     .instanceof(File)
     .optional()
     .refine((f) => !f || f.size === 0 || f.type === "application/pdf", {
-      message: "O ficheiro deve ser um PDF."
+      message: "O ficheiro deve ser um PDF.",
     })
     .refine((f) => !f || f.size <= maxPdfSize, {
-      message: "O PDF deve ter no máximo 15 MB."
-    })
+      message: "O PDF deve ter no máximo 15 MB.",
+    }),
 });
 
 export type SermonInput = z.infer<typeof sermonSchema>;
@@ -32,7 +33,7 @@ export const pastorProfileSchema = z.object({
     .min(0, "Valor inválido.")
     .max(80, "Valor inválido."),
   pastor_type: z.enum(["senior", "colaborador"], {
-    errorMap: () => ({ message: "Seleccione o tipo de pastor." })
+    errorMap: () => ({ message: "Seleccione o tipo de pastor." }),
   }),
   academic_background: z.string().trim().min(2, "Indique a formação académica."),
   instagram_url: z.string().trim().url("URL inválido.").or(z.literal("")).optional(),
@@ -44,7 +45,7 @@ export const pastorProfileSchema = z.object({
     .trim()
     .min(6, "Número inválido.")
     .regex(/^[0-9 \-]+$/, "Apenas dígitos, espaços ou hífens."),
-  contact_email: z.string().trim().email("Email inválido.")
+  contact_email: z.string().trim().email("Email inválido."),
 });
 
 export type PastorProfileInput = z.infer<typeof pastorProfileSchema>;
