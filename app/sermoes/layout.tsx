@@ -1,4 +1,4 @@
-import { BookOpen, CheckSquare, LogOut, Plus, UserCircle, Users } from "lucide-react";
+import { BookOpen, CheckSquare, Info, LogOut, Plus, UserCircle, Users } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import TabNav from "@/components/tab-nav";
@@ -45,22 +45,25 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
     ? "Perfil — Revisto"
     : "O meu perfil";
 
-  const tabs = admin
-    ? [
-        { href: "/sermoes", label: "Sermões", exact: true },
-        {
-          href: "/sermoes/aprovar",
-          label: "A Aprovar",
-          icon: <CheckSquare size={14} />,
-          badge: pendingCount,
-        },
-        {
-          href: "/sermoes/pastores",
-          label: "Pastores",
-          icon: <Users size={14} />,
-        },
-      ]
-    : [{ href: "/sermoes", label: "Sermões", exact: true }];
+  const tabs = [
+    { href: "/sermoes", label: "Sermões", exact: true },
+    { href: "/sermoes/sobre", label: "Sobre", icon: <Info size={14} /> },
+    ...(admin
+      ? [
+          {
+            href: "/sermoes/aprovar",
+            label: "A Aprovar",
+            icon: <CheckSquare size={14} />,
+            badge: pendingCount,
+          },
+          {
+            href: "/sermoes/pastores",
+            label: "Pastores",
+            icon: <Users size={14} />,
+          },
+        ]
+      : []),
+  ];
 
   return (
     <main className="min-h-screen bg-linen">
@@ -74,7 +77,7 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
               </span>
               <span>
                 <span className="block text-xs font-semibold uppercase tracking-[0.16em] text-olive sm:text-sm">
-                  Pastor Fabrício Ottoni
+                  Servos Fiéis
                 </span>
                 <span className="text-base font-semibold text-ink sm:text-xl">
                   Recursos úteis para o pregador
