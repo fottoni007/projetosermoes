@@ -76,7 +76,8 @@ function renderContent(text: string) {
     if (line.startsWith("### ")) { flushPara(); flushList(); blocks.push(<h3 key={k++} className="mt-5 text-base font-semibold text-ink">{line.slice(4)}</h3>); continue; }
     if (line.startsWith("## ")) { flushPara(); flushList(); blocks.push(<h2 key={k++} className="mt-7 text-lg font-semibold text-ink">{line.slice(3)}</h2>); continue; }
     if (line.startsWith("- ")) { flushPara(); list.push(line.slice(2)); continue; }
-    flushPara2: { flushList(); para.push(line); }
+    flushList();
+    para.push(line);
   }
   flushPara(); flushList();
   return blocks;
