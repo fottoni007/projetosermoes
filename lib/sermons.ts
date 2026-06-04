@@ -16,6 +16,7 @@ function formDataToObject(formData: FormData) {
     preacher_name: String(formData.get("preacher_name") ?? ""),
     date: String(formData.get("date") ?? ""),
     biblical_text: String(formData.get("biblical_text") ?? ""),
+    sermon_type: String(formData.get("sermon_type") ?? ""),
     is_series: String(formData.get("is_series") ?? "false") === "true",
     series_theme: String(formData.get("series_theme") ?? ""),
     notes: String(formData.get("notes") ?? ""),
