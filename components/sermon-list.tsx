@@ -1,5 +1,6 @@
 import { Calendar, Clock, FileText, Sparkles, UserRound } from "lucide-react";
 import Link from "next/link";
+import { sermonTypeLabel } from "@/lib/sermon-types";
 import type { Sermon } from "@/types/sermon";
 
 type SermonListProps = {
@@ -36,6 +37,11 @@ export default function SermonList({ sermons, query, currentUserId }: SermonList
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-base font-semibold text-ink sm:text-lg">{sermon.title}</h2>
+                {sermonTypeLabel(sermon.sermon_type) && (
+                  <span className="inline-flex items-center rounded-full bg-ink/5 px-2 py-0.5 text-xs font-semibold text-ink/60">
+                    {sermonTypeLabel(sermon.sermon_type)}
+                  </span>
+                )}
                 {sermon.status === "pending" && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">
                     <Clock size={10} /> Aguarda aprovação
