@@ -7,6 +7,9 @@ export const sermonSchema = z.object({
   preacher_name: z.string().trim().min(2, "Indique o nome do pregador."),
   date: z.string().min(1, "Indique a data do sermão."),
   biblical_text: z.string().trim().min(2, "Indique o texto bíblico principal."),
+  sermon_type: z.enum(["expositivo", "textual", "tematico", "narrativo"], {
+    errorMap: () => ({ message: "Seleccione o tipo de sermão." }),
+  }),
   is_series: z.boolean(),
   series_theme: z.string().trim().min(2, "Indique o tema ou o nome da série."),
   notes: z.string().trim().min(1, "Adicione pelo menos uma nota."),
