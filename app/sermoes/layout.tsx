@@ -1,4 +1,4 @@
-import { BookOpen, CheckSquare, Download, Feather, Info, Lightbulb, LogOut, Plus, UserCircle, Users } from "lucide-react";
+import { BookOpen, CheckSquare, Download, Feather, Info, Library, Lightbulb, LogOut, Plus, UserCircle, Users } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import TabNav from "@/components/tab-nav";
@@ -48,7 +48,7 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
   // Padrão fixo: Sermões · A Arte da Pregação · Sobre (+ admin: A Aprovar · Pastores)
   const tabs = [
     { href: "/sermoes/arte-pregacao", label: "A Arte da Pregação", icon: <Feather size={14} /> },
-    { href: "/sermoes", label: "Biblioteca de sermões", exact: true },
+    { href: "/sermoes", label: "Biblioteca de sermões", icon: <Library size={14} />, exact: true },
     { href: "/sermoes/dicas-preciosas", label: "Dicas Preciosas", icon: <Lightbulb size={14} /> },
     { href: "/sermoes/downloads", label: "Downloads", icon: <Download size={14} /> },
     { href: "/sermoes/sobre", label: "Sobre", icon: <Info size={14} /> },
