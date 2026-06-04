@@ -1,4 +1,4 @@
-import { BookOpen, CheckSquare, Feather, Info, LogOut, Plus, UserCircle, Users } from "lucide-react";
+import { BookOpen, CheckSquare, Feather, Info, Lightbulb, LogOut, Plus, UserCircle, Users } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import TabNav from "@/components/tab-nav";
@@ -49,6 +49,7 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
   const tabs = [
     { href: "/sermoes", label: "Sermões", exact: true },
     { href: "/sermoes/arte-pregacao", label: "A Arte da Pregação", icon: <Feather size={14} /> },
+    { href: "/sermoes/dicas-preciosas", label: "Dicas Preciosas", icon: <Lightbulb size={14} /> },
     { href: "/sermoes/sobre", label: "Sobre", icon: <Info size={14} /> },
     ...(admin
       ? [
