@@ -47,8 +47,8 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
 
   // Padrão fixo: Sermões · A Arte da Pregação · Sobre (+ admin: A Aprovar · Pastores)
   const tabs = [
-    { href: "/sermoes", label: "Sermões", exact: true },
     { href: "/sermoes/arte-pregacao", label: "A Arte da Pregação", icon: <Feather size={14} /> },
+    { href: "/sermoes", label: "Biblioteca de sermões", exact: true },
     { href: "/sermoes/dicas-preciosas", label: "Dicas Preciosas", icon: <Lightbulb size={14} /> },
     { href: "/sermoes/downloads", label: "Downloads", icon: <Download size={14} /> },
     { href: "/sermoes/sobre", label: "Sobre", icon: <Info size={14} /> },
