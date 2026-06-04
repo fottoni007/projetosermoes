@@ -40,7 +40,7 @@ export async function uploadResourceAction(
     return { success: false, error: insErr.message };
   }
 
-  revalidatePath("/sermoes/dicas-preciosas");
+  revalidatePath("/sermoes/downloads");
   return { success: true };
 }
 
@@ -63,6 +63,6 @@ export async function deleteResourceAction(
     await supabase.storage.from(BUCKET).remove([row.file_path as string]);
   }
 
-  revalidatePath("/sermoes/dicas-preciosas");
+  revalidatePath("/sermoes/downloads");
   return { success: true };
 }
