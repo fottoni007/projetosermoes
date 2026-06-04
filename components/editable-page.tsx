@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { updateSitePageAction } from "@/lib/update-site-page";
 
-// Extrai o ID de um vídeo do YouTube a partir de um link OU de um código de
-// incorporação (<iframe ... src="...youtube.com/embed/ID...">). Devolve null se não houver.
 function extractYouTubeId(text: string): string | null {
   const patterns = [
     /youtube\.com\/embed\/([A-Za-z0-9_-]{11})/,
@@ -22,9 +20,39 @@ function extractYouTubeId(text: string): string | null {
   return null;
 }
 
-// Renderizador seguro: linha em branco = parágrafo, "## " = subtítulo,
-// "### " = subtítulo menor, "- " = lista, link/embed do YouTube = player.
-// Nunca injecta HTML arbitrário — só constrói nós React controlados.
+// Converte texto em nós React, tornando emails e links clicáveis.
+function renderInline(text: string): React.ReactNode[] {
+  const nodes: React.ReactNode[] = [];
+  const regex = /(https?:\/\/[^\s]+)|([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})/g;
+  const linkClass = "font-medium text-olive underline underline-offset-2 hover:text-olive/80";
+  let last = 0;
+  let i = 0;
+  let m: RegExpExecArray | null;
+  while ((m = regex.exec(text)) !== null) {
+    if (m.index > last) nodes.push(text.slice(last, m.index));
+    if (m[1]) {
+      let url = m[1];
+      let trailing = "";
+      const tm = url.match(/[.,;:!?)\]]+$/);
+      if (tm) {
+        trailing = tm[0];
+        url = url.slice(0, url.length - trailing.length);
+      }
+      nodes.push(
+        <a key={i++} href={url} target="_blank" rel="noopener noreferrer" className={linkClass}>{url}</a>
+      );
+      if (trailing) nodes.push(trailing);
+    } else if (m[2]) {
+      nodes.push(
+        <a key={i++} href={`mailto:${m[2]}`} className={linkClass}>{m[2]}</a>
+      );
+    }
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes;
+}
+
 function renderContent(text: string) {
   const lines = text.replace(/\r\n/g, "\n").split("\n");
   const blocks: React.ReactNode[] = [];
@@ -34,7 +62,7 @@ function renderContent(text: string) {
 
   const flushPara = () => {
     if (para.length) {
-      blocks.push(<p key={k++} className="leading-7 text-ink/75">{para.join(" ")}</p>);
+      blocks.push(<p key={k++} className="leading-7 text-ink/75">{renderInline(para.join(" "))}</p>);
       para = [];
     }
   };
@@ -42,7 +70,7 @@ function renderContent(text: string) {
     if (list.length) {
       blocks.push(
         <ul key={k++} className="list-disc space-y-1.5 pl-5 leading-7 text-ink/75">
-          {list.map((it, i) => <li key={i}>{it}</li>)}
+          {list.map((it, idx) => <li key={idx}>{renderInline(it)}</li>)}
         </ul>
       );
       list = [];
@@ -52,7 +80,6 @@ function renderContent(text: string) {
   for (const raw of lines) {
     const line = raw.trim();
 
-    // Vídeo do YouTube (link ou código de incorporação) numa linha própria
     const yt = extractYouTubeId(raw);
     if (yt) {
       flushPara();
@@ -79,7 +106,8 @@ function renderContent(text: string) {
     flushList();
     para.push(line);
   }
-  flushPara(); flushList();
+  flushPara();
+  flushList();
   return blocks;
 }
 
@@ -138,8 +166,9 @@ export default function EditablePage({ slug, title, initialContent, isAdmin }: P
             className="min-h-[55vh] w-full rounded-md border border-ink/15 bg-white px-3 py-2 font-mono text-sm leading-6 outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10"
           />
           <div className="mt-2 space-y-1 text-xs text-ink/45">
-            <p>Formatação: deixa uma linha em branco entre parágrafos · &ldquo;## &rdquo; cria um subtítulo · &ldquo;- &rdquo; cria um item de lista.</p>
-            <p>Vídeo do YouTube: cola o link (ou o código de incorporação) numa linha própria — aparece automaticamente como player.</p>
+            <p>Formatação: linha em branco entre parágrafos · &ldquo;## &rdquo; subtítulo · &ldquo;- &rdquo; lista.</p>
+            <p>Vídeo do YouTube: cola o link ou o código de incorporação numa linha própria.</p>
+            <p>Emails e links tornam-se automaticamente clicáveis.</p>
           </div>
           <div className="mt-4 flex flex-wrap gap-3">
             <button
