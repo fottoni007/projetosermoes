@@ -5,6 +5,7 @@ import { Save, Upload } from "lucide-react";
 import { useActionState, useState } from "react";
 import { useForm } from "react-hook-form";
 import { sermonSchema, type SermonInput } from "@/lib/validations";
+import { SERMON_TYPE_OPTIONS } from "@/lib/sermon-types";
 import type { Sermon, SermonFormState } from "@/types/sermon";
 
 const FORM_ID = "sermon-edit-form";
@@ -79,7 +80,7 @@ export default function SermonForm({
           </label>
 
           <label className="block">
-            <span className={labelTextClass}>Texto bíblico *</span>
+            <span className={labelTextClass}>Texto bíblico principal *</span>
             <input
               className={inputClass}
               {...register("biblical_text")}
@@ -88,6 +89,22 @@ export default function SermonForm({
               required
             />
             {fe("biblical_text") && <span className={errorClass}>{fe("biblical_text")}</span>}
+          </label>
+
+          <label className="block sm:col-span-2">
+            <span className={labelTextClass}>Tipo de sermão *</span>
+            <select
+              className={inputClass}
+              name="sermon_type"
+              defaultValue={initialValues?.sermon_type ?? ""}
+              required
+            >
+              <option value="" disabled>Seleccione o tipo…</option>
+              {SERMON_TYPE_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            {fe("sermon_type") && <span className={errorClass}>{fe("sermon_type")}</span>}
           </label>
 
           {/* Tipo: série ou tema único */}
