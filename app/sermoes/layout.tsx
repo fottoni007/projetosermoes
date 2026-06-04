@@ -45,9 +45,11 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
     ? "Perfil — Revisto"
     : "O meu perfil";
 
+  // Padrão fixo: Sermões · A Arte da Pregação · Sobre (+ admin: A Aprovar · Pastores)
   const tabs = [
     { href: "/sermoes", label: "Sermões", exact: true },
     { href: "/sermoes/arte-pregacao", label: "A Arte da Pregação", icon: <Feather size={14} /> },
+    { href: "/sermoes/sobre", label: "Sobre", icon: <Info size={14} /> },
     ...(admin
       ? [
           {
@@ -63,8 +65,6 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
           },
         ]
       : []),
-    // "Sobre" fica sempre como última aba (mais à direita)
-    { href: "/sermoes/sobre", label: "Sobre", icon: <Info size={14} /> },
   ];
 
   return (
