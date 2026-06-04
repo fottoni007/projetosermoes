@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { isAdminUser } from "@/lib/auth";
 import { getCurrentUser, getSermon, getPdfUrl } from "@/lib/sermons";
+import { sermonTypeLabel } from "@/lib/sermon-types";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -78,11 +79,16 @@ export default async function SermonDetailPage({ params }: Props) {
             {sermon.biblical_text}
           </span>
         </div>
-        <div className="mt-3">
+        <div className="mt-3 flex flex-wrap gap-2">
           <span className="inline-flex items-center gap-1.5 rounded-md bg-olive/10 px-2.5 py-1 text-xs font-semibold text-olive">
             {sermon.is_series ? <Layers size={12} /> : <Tag size={12} />}
             {sermon.is_series ? "Série" : "Tema único"}: {sermon.series_theme}
           </span>
+          {sermonTypeLabel(sermon.sermon_type) && (
+            <span className="inline-flex items-center rounded-md bg-ink/5 px-2.5 py-1 text-xs font-semibold text-ink/65">
+              {sermonTypeLabel(sermon.sermon_type)}
+            </span>
+          )}
         </div>
       </div>
 
