@@ -1,3 +1,5 @@
+import type { SermonType } from "@/lib/sermon-types";
+
 export type SermonStatus = "pending" | "published" | "rejected";
 
 export type Sermon = {
@@ -6,8 +8,9 @@ export type Sermon = {
   preacher_name: string;
   date: string;
   biblical_text: string;
-  series_theme: string;
   is_series: boolean;
+  series_theme: string;
+  sermon_type: SermonType | null;
   notes: string;
   pdf_path: string | null;
   status: SermonStatus;
