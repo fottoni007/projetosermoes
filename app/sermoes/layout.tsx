@@ -2,6 +2,7 @@ import { Bell, BookOpen, CheckSquare, Download, Feather, Info, Library, Lightbul
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import TabNav from "@/components/tab-nav";
+import { ToastProvider } from "@/components/toast";
 import { isAdminUser } from "@/lib/auth";
 import { hasSupabaseConfig } from "@/lib/config";
 import { getMyPastorProfile, isApprovedPastor, listPendingPastorProfiles } from "@/lib/pastor-profiles";
@@ -73,6 +74,7 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
   ];
 
   return (
+    <ToastProvider>
     <main className="min-h-screen bg-linen">
       <header className="border-b border-ink/10 bg-white">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -147,5 +149,6 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
         {children}
       </div>
     </main>
+    </ToastProvider>
   );
 }
