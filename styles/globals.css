@@ -14,6 +14,13 @@ body {
   margin: 0;
   background: #f7f2ea;
   color: #1f2933;
+  font-family: var(--font-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
 }
 
 a {
@@ -23,6 +30,26 @@ a {
 
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
+}
+
+/* Anel de foco visível para navegação por teclado */
+:focus-visible {
+  outline: 2px solid #586f4f;
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Respeitar preferência de menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
