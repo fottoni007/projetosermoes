@@ -1,4 +1,4 @@
-import { BookOpen, CheckSquare, Download, Feather, Info, Library, Lightbulb, LogOut, MessagesSquare, Plus, UserCircle, Users } from "lucide-react";
+import { Bell, BookOpen, CheckSquare, Download, Feather, Info, Library, Lightbulb, LogOut, MessagesSquare, Plus, UserCircle, Users } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import TabNav from "@/components/tab-nav";
@@ -6,6 +6,7 @@ import { isAdminUser } from "@/lib/auth";
 import { hasSupabaseConfig } from "@/lib/config";
 import { getMyPastorProfile, isApprovedPastor, listPendingPastorProfiles } from "@/lib/pastor-profiles";
 import { getCurrentUser, listPendingSermons } from "@/lib/sermons";
+import { getUnreadCount } from "@/lib/notifications-data";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,7 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
 
   const admin = isAdminUser(user);
   const approved = await isApprovedPastor();
+  const unread = await getUnreadCount();
   const profile = admin ? null : await getMyPastorProfile();
 
   const [pendingProfiles, pendingSermons] = admin
@@ -111,6 +113,18 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
                   <span className="sm:hidden">Perfil</span>
                 </Link>
               )}
+              <Link
+                href="/sermoes/notificacoes"
+                aria-label="Notificações"
+                className="relative inline-flex items-center gap-1.5 rounded-md border border-ink/10 bg-white px-3 py-2 text-sm font-semibold text-ink/70 transition hover:border-olive/40 hover:text-olive"
+              >
+                <Bell size={16} />
+                {unread > 0 && (
+                  <span className="absolute -right-1.5 -top-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-clay px-1 text-[10px] font-bold text-white">
+                    {unread > 9 ? "9+" : unread}
+                  </span>
+                )}
+              </Link>
               <form action="/logout" method="post">
                 <button
                   className="inline-flex items-center gap-1.5 rounded-md border border-ink/10 bg-white px-3 py-2 text-sm font-semibold text-ink/70 transition hover:border-clay/40 hover:text-clay"
