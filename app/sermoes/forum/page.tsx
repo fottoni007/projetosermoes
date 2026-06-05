@@ -2,7 +2,7 @@ import { MessageSquare, MessagesSquare, Plus, ShieldCheck, UserRound } from "luc
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import ForumSearch from "@/components/forum-search";
-import { FORUM_CATEGORIES, forumCategoryLabel } from "@/lib/forum-categories";
+import { FORUM_CATEGORIES, forumCategoryLabel, forumCategoryStyle } from "@/lib/forum-categories";
 import { getTopics } from "@/lib/forum-data";
 import { getCurrentUser } from "@/lib/sermons";
 
@@ -68,7 +68,7 @@ export default async function ForumPage({ searchParams }: Props) {
           {topics.map((t) => (
             <Link key={t.id} href={`/sermoes/forum/${t.id}`} className="block rounded-xl border border-ink/10 bg-white p-5 shadow-soft transition hover:-translate-y-0.5 hover:border-olive/35">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-olive/10 px-2 py-0.5 text-xs font-semibold text-olive">{forumCategoryLabel(t.category)}</span>
+                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${forumCategoryStyle(t.category)}`}>{forumCategoryLabel(t.category)}</span>
                 <h2 className="text-base font-semibold text-ink sm:text-lg">{t.title}</h2>
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink/55">
