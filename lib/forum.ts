@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { FORUM_CATEGORY_VALUES } from "@/lib/forum-categories";
 import type { ForumState } from "@/types/forum";
 
 type SC = Awaited<ReturnType<typeof createClient>>;
@@ -25,13 +26,15 @@ export async function createTopicAction(_prev: ForumState, formData: FormData): 
 
   const title = String(formData.get("title") ?? "").trim();
   const body = String(formData.get("body") ?? "").trim();
+  const rawCat = String(formData.get("category") ?? "geral");
+  const category = FORUM_CATEGORY_VALUES.includes(rawCat) ? rawCat : "geral";
   if (title.length < 4) return { message: "O título deve ter pelo menos 4 caracteres." };
   if (body.length < 10) return { message: "Desenvolve um pouco mais o conteúdo do tópico." };
 
   const name = await displayName(supabase, user.id, user.email);
   const { data, error } = await supabase
     .from("forum_topics")
-    .insert({ title, body, author_id: user.id, author_name: name })
+    .insert({ title, body, category, author_id: user.id, author_name: name })
     .select("id")
     .single();
   if (error) return { message: error.message };
