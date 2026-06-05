@@ -58,7 +58,7 @@ export default function PastorProfileForm({ existing }: { existing?: PastorProfi
 
       {/* Informação Pessoal */}
       <fieldset className="rounded-xl border border-ink/10 bg-white p-5 shadow-soft sm:p-6">
-        <legend className="px-1 text-sm font-semibold uppercase tracking-wide text-ink/60">Informação Pessoal</legend>
+        <legend className="px-1 text-sm font-semibold uppercase tracking-wide text-ink/70">Informação Pessoal</legend>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
 
           <label className="block sm:col-span-2">
@@ -96,7 +96,7 @@ export default function PastorProfileForm({ existing }: { existing?: PastorProfi
 
       {/* Informação Pastoral */}
       <fieldset className="rounded-xl border border-ink/10 bg-white p-5 shadow-soft sm:p-6">
-        <legend className="px-1 text-sm font-semibold uppercase tracking-wide text-ink/60">Informação Pastoral</legend>
+        <legend className="px-1 text-sm font-semibold uppercase tracking-wide text-ink/70">Informação Pastoral</legend>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
 
           <label className="block sm:col-span-2">
@@ -140,8 +140,8 @@ export default function PastorProfileForm({ existing }: { existing?: PastorProfi
 
       {/* Redes Sociais */}
       <fieldset className="rounded-xl border border-ink/10 bg-white p-5 shadow-soft sm:p-6">
-        <legend className="px-1 text-sm font-semibold uppercase tracking-wide text-ink/60">
-          Redes Sociais <span className="font-normal normal-case text-ink/40">(opcional)</span>
+        <legend className="px-1 text-sm font-semibold uppercase tracking-wide text-ink/70">
+          Redes Sociais <span className="font-normal normal-case text-ink/70">(opcional)</span>
         </legend>
         <div className="mt-4 grid gap-4 sm:grid-cols-3">
           {[

@@ -34,6 +34,7 @@ export default function DeleteForumButton({ action, redirectTo, confirmText, sma
       onClick={onClick}
       disabled={isPending}
       title="Apagar"
+      aria-label="Apagar"
       className={`inline-flex items-center gap-1.5 rounded-md border border-clay/30 font-medium text-clay transition hover:bg-clay/5 disabled:opacity-50 ${small ? "px-2 py-1 text-xs" : "px-3 py-2 text-sm"}`}
     >
       <Trash2 size={small ? 13 : 15} />

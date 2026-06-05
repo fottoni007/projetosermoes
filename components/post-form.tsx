@@ -120,7 +120,7 @@ export default function PostForm({ action, initialValues, submitLabel }: Props) 
             Inserir imagem no texto
             <input type="file" accept="image/*" className="sr-only" onChange={onInline} />
           </label>
-          <p className="text-xs text-ink/45">Vídeo/podcast: cola o link (YouTube, Spotify ou Apple Podcasts) numa linha própria.</p>
+          <p className="text-xs text-ink/70">Vídeo/podcast: cola o link (YouTube, Spotify ou Apple Podcasts) numa linha própria.</p>
         </div>
       </div>
 

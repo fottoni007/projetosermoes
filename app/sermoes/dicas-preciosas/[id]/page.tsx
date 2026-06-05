@@ -46,7 +46,7 @@ export default async function PostDetailPage({ params }: Props) {
         ))}
       </div>
       <h1 className="mt-3 text-2xl font-bold text-ink sm:text-3xl">{post.title}</h1>
-      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink/60">
+      <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-ink/70">
         <span className="inline-flex items-center gap-1.5"><UserRound size={14} className="text-olive" /> {post.author}</span>
         <span className="inline-flex items-center gap-1.5"><CalendarDays size={14} className="text-olive" /> {new Intl.DateTimeFormat("pt-PT", { dateStyle: "long" }).format(new Date(post.published_at))}</span>
       </div>

@@ -45,7 +45,7 @@ export default function EditablePage({ slug, title, initialContent, isAdmin }: P
       {editing ? (
         <div className="rounded-xl border border-ink/10 bg-white p-5 shadow-soft sm:p-6">
           <textarea value={draft} onChange={(e) => setDraft(e.target.value)} className="min-h-[55vh] w-full rounded-md border border-ink/15 bg-white px-3 py-2 font-mono text-sm leading-6 outline-none transition focus:border-olive focus:ring-4 focus:ring-olive/10" />
-          <div className="mt-2 space-y-1 text-xs text-ink/45">
+          <div className="mt-2 space-y-1 text-xs text-ink/70">
             <p>Formatação: linha em branco entre parágrafos · &ldquo;## &rdquo; subtítulo · &ldquo;- &rdquo; lista.</p>
             <p>Vídeo/podcast/imagem: cola o link numa linha própria (YouTube, Spotify, Apple Podcasts ou URL de imagem).</p>
             <p>Emails e links tornam-se automaticamente clicáveis.</p>
@@ -63,7 +63,7 @@ export default function EditablePage({ slug, title, initialContent, isAdmin }: P
         </div>
       ) : (
         <article className="space-y-4 rounded-xl border border-ink/10 bg-white p-6 shadow-soft sm:p-8">
-          {content.trim() ? <RichContent text={content} /> : <p className="text-ink/40">Sem conteúdo.</p>}
+          {content.trim() ? <RichContent text={content} /> : <p className="text-ink/70">Sem conteúdo.</p>}
         </article>
       )}
     </section>

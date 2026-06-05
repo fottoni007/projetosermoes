@@ -23,7 +23,7 @@ export default async function PastorProfilePage() {
         <div className="mb-6">
           <Link
             href="/sermoes"
-            className="inline-flex items-center gap-2 text-sm text-ink/55 transition hover:text-olive"
+            className="inline-flex items-center gap-2 text-sm text-ink/70 transition hover:text-olive"
           >
             <ArrowLeft size={15} />
             Voltar à página principal
@@ -32,7 +32,7 @@ export default async function PastorProfilePage() {
 
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-ink sm:text-3xl">Perfil de Pastor</h1>
-          <p className="mt-2 text-sm leading-6 text-ink/65">
+          <p className="mt-2 text-sm leading-6 text-ink/70">
             Preenche o teu perfil para poderes submeter sermões. Após a submissão, o perfil será analisado pelo administrador.
           </p>
         </div>
@@ -70,7 +70,7 @@ export default async function PastorProfilePage() {
         <div className="mt-8">
           <Link
             href="/sermoes"
-            className="inline-flex items-center gap-2 text-sm text-ink/50 transition hover:text-olive"
+            className="inline-flex items-center gap-2 text-sm text-ink/70 transition hover:text-olive"
           >
             <ArrowLeft size={15} />
             Voltar à página principal

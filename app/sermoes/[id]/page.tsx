@@ -65,7 +65,7 @@ export default async function SermonDetailPage({ params }: Props) {
       {/* Header card */}
       <div className="rounded-xl border border-ink/10 bg-white p-6 shadow-soft sm:p-8">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">{sermon.title}</h1>
-        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink/65">
+        <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-ink/70">
           <span className="inline-flex items-center gap-1.5">
             <UserRound size={15} className="text-olive" />
             {sermon.preacher_name}
@@ -85,7 +85,7 @@ export default async function SermonDetailPage({ params }: Props) {
             {sermon.is_series ? "Série" : "Tema único"}: {sermon.series_theme}
           </span>
           {sermonTypeLabel(sermon.sermon_type) && (
-            <span className="inline-flex items-center rounded-md bg-ink/5 px-2.5 py-1 text-xs font-semibold text-ink/65">
+            <span className="inline-flex items-center rounded-md bg-ink/5 px-2.5 py-1 text-xs font-semibold text-ink/70">
               {sermonTypeLabel(sermon.sermon_type)}
             </span>
           )}
@@ -116,7 +116,7 @@ export default async function SermonDetailPage({ params }: Props) {
             <FileText size={18} />
             Ficheiro PDF
           </h2>
-          <p className="mt-1.5 text-sm text-ink/55">
+          <p className="mt-1.5 text-sm text-ink/70">
             Documento completo do sermão para leitura ou download.
           </p>
           <a
@@ -134,7 +134,7 @@ export default async function SermonDetailPage({ params }: Props) {
       <div className="mt-8">
         <Link
           href="/sermoes"
-          className="inline-flex items-center gap-2 text-sm text-ink/50 transition hover:text-olive"
+          className="inline-flex items-center gap-2 text-sm text-ink/70 transition hover:text-olive"
         >
           <ArrowLeft size={15} />
           Voltar à lista de sermões

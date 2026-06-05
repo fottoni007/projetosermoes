@@ -15,7 +15,7 @@ export default async function NotificacoesPage() {
     <section className="mx-auto max-w-2xl px-4 py-8 sm:px-6">
       <MarkRead />
       <div className="mb-6">
-        <Link href="/sermoes/forum" className="inline-flex items-center gap-1.5 text-sm text-ink/50 transition hover:text-olive">
+        <Link href="/sermoes/forum" className="inline-flex items-center gap-1.5 text-sm text-ink/70 transition hover:text-olive">
           <ArrowLeft size={15} /> Voltar ao fórum
         </Link>
       </div>
@@ -24,7 +24,7 @@ export default async function NotificacoesPage() {
       </h1>
 
       {notifications.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-ink/20 bg-white p-10 text-center text-sm text-ink/55">
+        <div className="rounded-xl border border-dashed border-ink/20 bg-white p-10 text-center text-sm text-ink/70">
           Não tens notificações de momento.
         </div>
       ) : (
@@ -43,7 +43,7 @@ export default async function NotificacoesPage() {
                   <strong className="text-ink">{n.actor_name}</strong> respondeu ao tópico{" "}
                   <strong className="text-ink">{n.topic_title}</strong>.
                 </p>
-                <p className="mt-0.5 text-xs text-ink/45">
+                <p className="mt-0.5 text-xs text-ink/70">
                   {new Intl.DateTimeFormat("pt-PT", { dateStyle: "medium", timeStyle: "short" }).format(new Date(n.created_at))}
                 </p>
               </div>

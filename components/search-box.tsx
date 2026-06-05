@@ -33,7 +33,7 @@ export default function SearchBox({ defaultValue }: SearchBoxProps) {
       <label className="relative flex-1">
         <span className="sr-only">Pesquisar sermões</span>
         <Search
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink/45"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink/70"
           size={18}
         />
         <input

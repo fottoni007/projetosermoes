@@ -36,7 +36,7 @@ export default async function EditSermonPage({ params }: Props) {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href={`/sermoes/${id}`}
-          className="inline-flex items-center gap-1.5 text-sm text-ink/50 transition hover:text-olive"
+          className="inline-flex items-center gap-1.5 text-sm text-ink/70 transition hover:text-olive"
         >
           <ArrowLeft size={15} />
           Voltar ao sermão
@@ -44,7 +44,7 @@ export default async function EditSermonPage({ params }: Props) {
       </div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">Editar sermão</h1>
-        <p className="mt-2 text-sm leading-6 text-ink/65">
+        <p className="mt-2 text-sm leading-6 text-ink/70">
           Actualiza os dados do sermão. Se enviares um novo PDF, será verificado e analisado por IA.
         </p>
       </div>

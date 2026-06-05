@@ -48,7 +48,7 @@ export default async function TopicPage({ params }: Props) {
         <div className="mt-3">
           <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${forumCategoryStyle(topic.category)}`}>{forumCategoryLabel(topic.category)}</span>
         </div>
-        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink/55">
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink/70">
           <span className="inline-flex items-center gap-1.5"><UserRound size={13} className="text-olive" /> {topic.author_name}</span>
           <span>{fmt(topic.created_at)}</span>
         </div>
@@ -67,7 +67,7 @@ export default async function TopicPage({ params }: Props) {
               return (
                 <div key={r.id} className="rounded-xl border border-ink/10 bg-white p-4 shadow-soft">
                   <div className="flex items-start justify-between gap-3">
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-ink/55">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-ink/70">
                       <span className="inline-flex items-center gap-1.5 font-medium text-ink/70"><UserRound size={12} className="text-olive" /> {r.author_name}</span>
                       <span>{fmt(r.created_at)}</span>
                     </div>

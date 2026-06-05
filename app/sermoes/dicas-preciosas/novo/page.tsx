@@ -17,7 +17,7 @@ export default async function NovoPostPage() {
   return (
     <section className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <div className="mb-6">
-        <Link href="/sermoes/dicas-preciosas" className="inline-flex items-center gap-1.5 text-sm text-ink/50 transition hover:text-olive">
+        <Link href="/sermoes/dicas-preciosas" className="inline-flex items-center gap-1.5 text-sm text-ink/70 transition hover:text-olive">
           <ArrowLeft size={15} /> Voltar
         </Link>
       </div>

@@ -170,9 +170,9 @@ export default function SermonForm({
           <div className="block sm:col-span-2">
             <span className={labelTextClass}>
               Ficheiro PDF *{" "}
-              <span className="font-normal text-ink/50">(obrigatório, máx. 15 MB)</span>
+              <span className="font-normal text-ink/70">(obrigatório, máx. 15 MB)</span>
             </span>
-            <label className="mt-2 flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-ink/20 bg-mist/40 px-4 py-5 text-center text-sm text-ink/65 transition hover:border-olive/50 hover:bg-olive/5">
+            <label className="mt-2 flex min-h-28 cursor-pointer flex-col items-center justify-center rounded-md border border-dashed border-ink/20 bg-mist/40 px-4 py-5 text-center text-sm text-ink/70 transition hover:border-olive/50 hover:bg-olive/5">
               <Upload className="mb-2 text-olive" size={22} />
               {fileName ? (
                 <span className="font-medium text-olive">{fileName}</span>
@@ -189,7 +189,7 @@ export default function SermonForm({
               />
             </label>
             {fe("pdf") && <span className={errorClass}>{fe("pdf")}</span>}
-            <p className="mt-1.5 text-xs text-ink/45">
+            <p className="mt-1.5 text-xs text-ink/70">
               O PDF será verificado contra malware e analisado por IA. PDFs com hiperlinks não são aceites.
             </p>
           </div>

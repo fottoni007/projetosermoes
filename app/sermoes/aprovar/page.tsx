@@ -36,7 +36,7 @@ export default async function AprovarPage() {
         </div>
 
         {pendingProfiles.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-ink/20 bg-white p-8 text-center text-sm text-ink/50">
+          <div className="rounded-xl border border-dashed border-ink/20 bg-white p-8 text-center text-sm text-ink/70">
             Nenhum perfil pendente. ✓
           </div>
         ) : (
@@ -50,8 +50,8 @@ export default async function AprovarPage() {
                     </div>
                     <div>
                       <p className="font-semibold text-ink">{profile.full_name}</p>
-                      <p className="text-sm text-ink/65">{profile.church_name}</p>
-                      <p className="text-xs text-ink/45">{profile.address}</p>
+                      <p className="text-sm text-ink/70">{profile.church_name}</p>
+                      <p className="text-xs text-ink/70">{profile.address}</p>
                     </div>
                   </div>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
@@ -67,7 +67,7 @@ export default async function AprovarPage() {
                     ["Telefone", `${profile.phone_country_code} ${profile.phone_number}`],
                   ].map(([label, value]) => (
                     <div key={label}>
-                      <dt className="text-xs font-medium text-ink/45">{label}</dt>
+                      <dt className="text-xs font-medium text-ink/70">{label}</dt>
                       <dd className="truncate text-ink/80">{value}</dd>
                     </div>
                   ))}
@@ -102,7 +102,7 @@ export default async function AprovarPage() {
         </div>
 
         {pendingSermons.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-ink/20 bg-white p-8 text-center text-sm text-ink/50">
+          <div className="rounded-xl border border-dashed border-ink/20 bg-white p-8 text-center text-sm text-ink/70">
             Nenhum sermão pendente. ✓
           </div>
         ) : (
@@ -112,15 +112,15 @@ export default async function AprovarPage() {
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <p className="font-semibold text-ink">{sermon.title}</p>
-                    <p className="text-sm text-ink/65">{sermon.preacher_name} · {sermon.series_theme}</p>
-                    <p className="text-xs text-ink/45">{sermon.biblical_text} · {new Intl.DateTimeFormat("pt-PT").format(new Date(sermon.date))}</p>
+                    <p className="text-sm text-ink/70">{sermon.preacher_name} · {sermon.series_theme}</p>
+                    <p className="text-xs text-ink/70">{sermon.biblical_text} · {new Intl.DateTimeFormat("pt-PT").format(new Date(sermon.date))}</p>
                   </div>
                   <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
                     <Clock size={11} /> Pendente
                   </span>
                 </div>
                 {sermon.notes && (
-                  <p className="mt-3 line-clamp-2 text-sm text-ink/60">{sermon.notes}</p>
+                  <p className="mt-3 line-clamp-2 text-sm text-ink/70">{sermon.notes}</p>
                 )}
                 {sermon.ai_summary && (
                   <div className="mt-3 rounded-lg bg-olive/5 p-3">

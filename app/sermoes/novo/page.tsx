@@ -22,7 +22,7 @@ export default async function NewSermonPage() {
       <div className="mb-6 flex items-center gap-3">
         <Link
           href="/sermoes"
-          className="inline-flex items-center gap-1.5 text-sm text-ink/50 transition hover:text-olive"
+          className="inline-flex items-center gap-1.5 text-sm text-ink/70 transition hover:text-olive"
         >
           <ArrowLeft size={15} />
           Voltar
@@ -30,7 +30,7 @@ export default async function NewSermonPage() {
       </div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">Novo sermão</h1>
-        <p className="mt-2 text-sm leading-6 text-ink/65">
+        <p className="mt-2 text-sm leading-6 text-ink/70">
           {admin
             ? "Todos os campos são obrigatórios. O PDF será analisado por IA."
             : "O sermão ficará pendente de aprovação. Todos os campos e o PDF são obrigatórios."}

@@ -17,7 +17,7 @@ export default async function SermonsPage({ searchParams }: SermonsPageProps) {
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-ink sm:text-3xl">Biblioteca de sermões</h1>
-          <p className="mt-1.5 text-sm leading-6 text-ink/65">
+          <p className="mt-1.5 text-sm leading-6 text-ink/70">
             Pesquisa por título, passagem bíblica, tema da série ou notas.
           </p>
         </div>

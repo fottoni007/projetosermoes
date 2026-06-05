@@ -10,7 +10,7 @@ export default function RgpdPage() {
         <h1 className="mt-3 text-3xl font-semibold text-ink">
           Termos de Privacidade e RGPD
         </h1>
-        <p className="mt-3 text-sm leading-6 text-ink/65">
+        <p className="mt-3 text-sm leading-6 text-ink/70">
           Última actualização: 5 de Junho de 2026
         </p>
 

@@ -28,7 +28,7 @@ export default function TabNav({ tabs }: { tabs: Tab[] }) {
             className={`inline-flex shrink-0 items-center gap-1.5 border-b-2 pb-3 px-2 transition ${
               isActive
                 ? "border-olive text-olive"
-                : "border-transparent text-ink/55 hover:text-ink"
+                : "border-transparent text-ink/70 hover:text-ink"
             }`}
           >
             {tab.icon}

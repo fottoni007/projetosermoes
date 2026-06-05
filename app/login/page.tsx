@@ -45,7 +45,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <div className="grid gap-5 lg:grid-cols-2">
           <form action={signIn} className="rounded-lg border border-ink/10 bg-white p-6 shadow-soft">
             <h2 className="text-xl font-semibold text-ink">Entrar</h2>
-            <p className="mt-2 text-sm leading-6 text-ink/65">
+            <p className="mt-2 text-sm leading-6 text-ink/70">
               Usa o email e a palavra-passe da tua conta.
             </p>
 
@@ -96,7 +96,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
           <form action={signUp} className="rounded-lg border border-ink/10 bg-white p-6 shadow-soft">
             <h2 className="text-xl font-semibold text-ink">Criar conta</h2>
-            <p className="mt-2 text-sm leading-6 text-ink/65">
+            <p className="mt-2 text-sm leading-6 text-ink/70">
               Cria um novo acesso para a equipa interna.
             </p>
 

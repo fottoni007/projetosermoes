@@ -27,7 +27,7 @@ export default async function DicasPreciosasPage() {
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-ink sm:text-3xl">Dicas Preciosas</h1>
-          <p className="mt-1 text-sm text-ink/65">Artigos, reflexões e recursos para o teu ministério.</p>
+          <p className="mt-1 text-sm text-ink/70">Artigos, reflexões e recursos para o teu ministério.</p>
         </div>
         {admin && (
           <Link href="/sermoes/dicas-preciosas/novo" className="inline-flex items-center gap-2 rounded-md bg-olive px-3 py-2 text-sm font-semibold text-white transition hover:bg-olive/90">
@@ -39,7 +39,7 @@ export default async function DicasPreciosasPage() {
       {posts.length === 0 ? (
         <div className="rounded-xl border border-dashed border-ink/20 bg-white p-10 text-center">
           <Lightbulb className="mx-auto text-olive/50" size={28} />
-          <p className="mt-3 text-sm text-ink/60">Ainda não há posts publicados.</p>
+          <p className="mt-3 text-sm text-ink/70">Ainda não há posts publicados.</p>
         </div>
       ) : (
         <div className="grid gap-4">
@@ -57,8 +57,8 @@ export default async function DicasPreciosasPage() {
                     ))}
                   </div>
                   <h2 className="mt-2 text-lg font-semibold text-ink">{post.title}</h2>
-                  <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-ink/65">{excerpt(post.content)}</p>
-                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink/55">
+                  <p className="mt-1.5 line-clamp-2 text-sm leading-6 text-ink/70">{excerpt(post.content)}</p>
+                  <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink/70">
                     <span className="inline-flex items-center gap-1.5"><UserRound size={13} /> {post.author}</span>
                     <span className="inline-flex items-center gap-1.5"><CalendarDays size={13} /> {new Intl.DateTimeFormat("pt-PT", { dateStyle: "long" }).format(new Date(post.published_at))}</span>
                   </div>

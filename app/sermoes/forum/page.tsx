@@ -24,14 +24,14 @@ export default async function ForumPage({ searchParams }: Props) {
   };
 
   const chip = (active: boolean) =>
-    `rounded-full border px-3 py-1 text-xs font-medium transition ${active ? "border-olive bg-olive/10 text-olive" : "border-ink/15 text-ink/60 hover:border-olive/40"}`;
+    `rounded-full border px-3 py-1 text-xs font-medium transition ${active ? "border-olive bg-olive/10 text-olive" : "border-ink/15 text-ink/70 hover:border-olive/40"}`;
 
   return (
     <section className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-ink sm:text-3xl">Fórum da Pregação</h1>
-          <p className="mt-1 text-sm text-ink/65">Debate, partilha e aprende sobre a arte de pregar.</p>
+          <p className="mt-1 text-sm text-ink/70">Debate, partilha e aprende sobre a arte de pregar.</p>
         </div>
         <Link href="/sermoes/forum/novo" className="inline-flex items-center gap-2 rounded-md bg-olive px-3 py-2 text-sm font-semibold text-white transition hover:bg-olive/90">
           <Plus size={16} /> Novo tópico
@@ -59,7 +59,7 @@ export default async function ForumPage({ searchParams }: Props) {
       {topics.length === 0 ? (
         <div className="rounded-xl border border-dashed border-ink/20 bg-white p-10 text-center">
           <MessagesSquare className="mx-auto text-olive/50" size={28} />
-          <p className="mt-3 text-sm text-ink/60">
+          <p className="mt-3 text-sm text-ink/70">
             {params.q || params.cat ? "Nenhum tópico encontrado com estes critérios." : "Ainda não há tópicos. Sê o primeiro a iniciar uma conversa!"}
           </p>
         </div>
@@ -71,7 +71,7 @@ export default async function ForumPage({ searchParams }: Props) {
                 <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${forumCategoryStyle(t.category)}`}>{forumCategoryLabel(t.category)}</span>
                 <h2 className="text-base font-semibold text-ink sm:text-lg">{t.title}</h2>
               </div>
-              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink/55">
+              <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink/70">
                 <span className="inline-flex items-center gap-1.5"><UserRound size={13} /> {t.author_name}</span>
                 <span className="inline-flex items-center gap-1.5"><MessageSquare size={13} /> {t.reply_count} {t.reply_count === 1 ? "resposta" : "respostas"}</span>
                 <span>{new Intl.DateTimeFormat("pt-PT", { dateStyle: "medium" }).format(new Date(t.created_at))}</span>

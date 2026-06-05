@@ -47,7 +47,7 @@ export default function ResourcesSection({ items, isAdmin }: Props) {
       </h2>
 
       {items.length === 0 ? (
-        <p className="mt-3 text-sm text-ink/50">Ainda não há materiais disponíveis.</p>
+        <p className="mt-3 text-sm text-ink/70">Ainda não há materiais disponíveis.</p>
       ) : (
         <ul className="mt-4 divide-y divide-ink/5">
           {items.map((it) => (
@@ -74,6 +74,7 @@ export default function ResourcesSection({ items, isAdmin }: Props) {
                     disabled={isPending}
                     className="inline-flex items-center rounded-md border border-clay/30 px-2.5 py-1.5 text-xs font-medium text-clay transition hover:bg-clay/5 disabled:opacity-50"
                     title="Apagar material"
+                    aria-label="Apagar material"
                   >
                     <Trash2 size={14} />
                   </button>

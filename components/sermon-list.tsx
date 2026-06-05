@@ -16,7 +16,7 @@ export default function SermonList({ sermons, query, currentUserId }: SermonList
         <h2 className="text-lg font-semibold text-ink sm:text-xl">
           {query ? "Nenhum sermão encontrado." : "Ainda não existem sermões."}
         </h2>
-        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/60">
+        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-ink/70">
           {query
             ? "Tenta pesquisar com outras palavras."
             : "Cria o primeiro registo para começar a biblioteca."}
@@ -38,7 +38,7 @@ export default function SermonList({ sermons, query, currentUserId }: SermonList
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-base font-semibold text-ink sm:text-lg">{sermon.title}</h2>
                 {sermonTypeLabel(sermon.sermon_type) && (
-                  <span className="inline-flex items-center rounded-full bg-ink/5 px-2 py-0.5 text-xs font-semibold text-ink/60">
+                  <span className="inline-flex items-center rounded-full bg-ink/5 px-2 py-0.5 text-xs font-semibold text-ink/70">
                     {sermonTypeLabel(sermon.sermon_type)}
                   </span>
                 )}
@@ -53,7 +53,7 @@ export default function SermonList({ sermons, query, currentUserId }: SermonList
                   </span>
                 )}
               </div>
-              <p className="mt-1 text-sm text-ink/60 line-clamp-1">{sermon.series_theme}</p>
+              <p className="mt-1 text-sm text-ink/70 line-clamp-1">{sermon.series_theme}</p>
               <p className="mt-1.5 inline-flex items-center gap-1.5 text-sm font-medium text-olive">
                 <UserRound size={13} />
                 {sermon.preacher_name}
@@ -64,7 +64,7 @@ export default function SermonList({ sermons, query, currentUserId }: SermonList
               {new Intl.DateTimeFormat("pt-PT").format(new Date(sermon.date))}
             </span>
           </div>
-          <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-ink/55 sm:text-sm">
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-ink/70 sm:text-sm">
             <span className="inline-flex items-center gap-1.5">
               <FileText size={13} />
               {sermon.biblical_text}
