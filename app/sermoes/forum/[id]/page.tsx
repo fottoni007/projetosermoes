@@ -6,7 +6,7 @@ import ForumText from "@/components/forum-text";
 import ReplyForm from "@/components/reply-form";
 import { isAdminUser } from "@/lib/auth";
 import { createReplyAction, deleteReplyAction, deleteTopicAction } from "@/lib/forum";
-import { forumCategoryLabel } from "@/lib/forum-categories";
+import { forumCategoryLabel, forumCategoryStyle } from "@/lib/forum-categories";
 import { getTopic } from "@/lib/forum-data";
 import { getCurrentUser } from "@/lib/sermons";
 
@@ -46,7 +46,7 @@ export default async function TopicPage({ params }: Props) {
           )}
         </div>
         <div className="mt-3">
-          <span className="inline-flex items-center rounded-full bg-olive/10 px-2.5 py-0.5 text-xs font-semibold text-olive">{forumCategoryLabel(topic.category)}</span>
+          <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${forumCategoryStyle(topic.category)}`}>{forumCategoryLabel(topic.category)}</span>
         </div>
         <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink/55">
           <span className="inline-flex items-center gap-1.5"><UserRound size={13} className="text-olive" /> {topic.author_name}</span>
