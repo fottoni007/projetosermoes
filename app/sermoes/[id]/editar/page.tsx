@@ -45,7 +45,7 @@ export default async function EditSermonPage({ params }: Props) {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">Editar sermão</h1>
         <p className="mt-2 text-sm leading-6 text-ink/70">
-          Actualiza os dados do sermão. Se enviares um novo PDF, será verificado e analisado por IA.
+          Atualiza os dados do sermão. Se enviares um novo PDF, será verificado e analisado por IA.
         </p>
       </div>
 

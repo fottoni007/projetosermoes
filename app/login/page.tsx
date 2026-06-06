@@ -20,7 +20,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   const readableSignUpMessage =
     signUpMessage === "conta-criada"
-      ? "Conta criada. Se a confirmação por email estiver activa no Supabase, confirma o email antes de entrar."
+      ? "Conta criada. Se a confirmação por email estiver ativa no Supabase, confirma o email antes de entrar."
       : signUpMessage === "palavra-passe-curta"
         ? "A palavra-passe deve ter pelo menos 6 caracteres."
         : signUpMessage === "palavras-passe-diferentes"

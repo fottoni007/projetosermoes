@@ -99,7 +99,7 @@ export default function SermonForm({
               defaultValue={initialValues?.sermon_type ?? ""}
               required
             >
-              <option value="" disabled>Seleccione o tipo…</option>
+              <option value="" disabled>Selecione o tipo…</option>
               {SERMON_TYPE_OPTIONS.map((o) => (
                 <option key={o.value} value={o.value}>{o.label}</option>
               ))}
@@ -177,7 +177,7 @@ export default function SermonForm({
               {fileName ? (
                 <span className="font-medium text-olive">{fileName}</span>
               ) : (
-                <span>Clica para seleccionar um PDF</span>
+                <span>Clica para selecionar um PDF</span>
               )}
               <input
                 className="sr-only"

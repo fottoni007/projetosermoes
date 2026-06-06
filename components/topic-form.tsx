@@ -20,7 +20,7 @@ export default function TopicForm({ action }: { action: (prev: ForumState, fd: F
       <label className="block">
         <span className="text-sm font-medium text-ink">Categoria *</span>
         <select name="category" defaultValue="" required className={inputClass}>
-          <option value="" disabled>Selecciona uma categoria…</option>
+          <option value="" disabled>Seleciona uma categoria…</option>
           {FORUM_CATEGORIES.map((c) => (
             <option key={c.value} value={c.value}>{c.label}</option>
           ))}

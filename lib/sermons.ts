@@ -5,6 +5,7 @@ import { isApprovedPastor } from "@/lib/pastor-profiles";
 import { analyzePdf } from "@/lib/ai";
 import { scanPdfBuffer } from "@/lib/virustotal";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/current-user";
 import { sermonSchema } from "@/lib/validations";
 import type { Sermon, SermonFormState, SermonListItem } from "@/types/sermon";
 
@@ -36,11 +37,8 @@ async function uploadPdf(userId: string, sermonId: string, file: File) {
   return path;
 }
 
-export async function getCurrentUser() {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  return user;
-}
+// Reexportado de lib/current-user (memoizado por pedido com cache() do React).
+export { getCurrentUser };
 
 const SERMON_LIST_COLUMNS =
   "id, title, preacher_name, date, biblical_text, series_theme, sermon_type, status, ai_summary, pdf_path";
@@ -54,8 +52,8 @@ export type SermonListResult = {
 };
 
 export async function listSermons(query?: string, page = 1): Promise<SermonListResult> {
+  const user = await getCurrentUser();
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
 
   const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
 
@@ -215,7 +213,7 @@ export async function updateSermon(
 
   revalidatePath("/sermoes");
   revalidatePath(`/sermoes/${id}`);
-  return { message: "Sermão actualizado com sucesso." };
+  return { message: "Sermão atualizado com sucesso." };
 }
 
 export async function approveSermon(id: string): Promise<void> {
@@ -239,9 +237,9 @@ export async function rejectSermon(id: string): Promise<void> {
 }
 
 export async function listPendingSermons(): Promise<Sermon[]> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user || !isAdminUser(user)) return [];
+  const supabase = await createClient();
   const { data } = await supabase
     .from("sermons").select("*").eq("status", "pending").order("created_at", { ascending: true });
   return (data ?? []) as Sermon[];

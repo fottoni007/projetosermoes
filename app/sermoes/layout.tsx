@@ -8,6 +8,8 @@ import { hasSupabaseConfig } from "@/lib/config";
 import { getMyPastorProfile, isApprovedPastor, listPendingPastorProfiles } from "@/lib/pastor-profiles";
 import { getCurrentUser, listPendingSermons } from "@/lib/sermons";
 import { getUnreadCount } from "@/lib/notifications-data";
+import type { PastorProfile } from "@/types/pastor";
+import type { Sermon } from "@/types/sermon";
 
 export const dynamic = "force-dynamic";
 
@@ -29,13 +31,16 @@ export default async function SermonsLayout({ children }: Readonly<{ children: R
   if (!user) redirect("/login");
 
   const admin = isAdminUser(user);
-  const approved = await isApprovedPastor();
-  const unread = await getUnreadCount();
-  const profile = admin ? null : await getMyPastorProfile();
 
-  const [pendingProfiles, pendingSermons] = admin
-    ? await Promise.all([listPendingPastorProfiles(), listPendingSermons()])
-    : [[], []];
+  // Tudo o que depende do utilizador corre em paralelo (e getCurrentUser é
+  // memoizado por pedido), em vez de várias idas-e-voltas sequenciais ao Supabase.
+  const [approved, unread, profile, pendingProfiles, pendingSermons] = await Promise.all([
+    isApprovedPastor(),
+    getUnreadCount(),
+    admin ? Promise.resolve<PastorProfile | null>(null) : getMyPastorProfile(),
+    admin ? listPendingPastorProfiles() : Promise.resolve<PastorProfile[]>([]),
+    admin ? listPendingSermons() : Promise.resolve<Sermon[]>([]),
+  ]);
 
   const pendingCount =
     pendingProfiles.filter((p) => p.status === "pending").length + pendingSermons.length;

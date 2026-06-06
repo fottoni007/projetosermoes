@@ -8,7 +8,7 @@ export const sermonSchema = z.object({
   date: z.string().min(1, "Indique a data do sermão."),
   biblical_text: z.string().trim().min(2, "Indique o texto bíblico principal."),
   sermon_type: z.enum(["expositivo", "textual", "tematico", "narrativo"], {
-    errorMap: () => ({ message: "Seleccione o tipo de sermão." }),
+    errorMap: () => ({ message: "Selecione o tipo de sermão." }),
   }),
   is_series: z.boolean(),
   series_theme: z.string().trim().min(2, "Indique o tema ou o nome da série."),
@@ -36,13 +36,13 @@ export const pastorProfileSchema = z.object({
     .min(0, "Valor inválido.")
     .max(80, "Valor inválido."),
   pastor_type: z.enum(["senior", "colaborador"], {
-    errorMap: () => ({ message: "Seleccione o tipo de pastor." }),
+    errorMap: () => ({ message: "Selecione o tipo de pastor." }),
   }),
   academic_background: z.string().trim().min(2, "Indique a formação académica."),
   instagram_url: z.string().trim().url("URL inválido.").or(z.literal("")).optional(),
   facebook_url: z.string().trim().url("URL inválido.").or(z.literal("")).optional(),
   youtube_url: z.string().trim().url("URL inválido.").or(z.literal("")).optional(),
-  phone_country_code: z.string().min(1, "Seleccione o indicativo."),
+  phone_country_code: z.string().min(1, "Selecione o indicativo."),
   phone_number: z
     .string()
     .trim()

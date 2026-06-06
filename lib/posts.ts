@@ -33,7 +33,7 @@ export async function createPostAction(_prev: PostFormState, formData: FormData)
   if (!ctx) return { message: "Apenas o administrador pode criar posts." };
   const p = parsePost(formData);
   if (p.title.length < 2) return { message: "Indica o tema/título do post." };
-  if (p.categories.length === 0) return { message: "Selecciona pelo menos uma categoria." };
+  if (p.categories.length === 0) return { message: "Seleciona pelo menos uma categoria." };
 
   const { data, error } = await ctx.supabase
     .from("posts")
@@ -59,7 +59,7 @@ export async function updatePostAction(id: string, _prev: PostFormState, formDat
   if (!ctx) return { message: "Sem permissão." };
   const p = parsePost(formData);
   if (p.title.length < 2) return { message: "Indica o tema/título do post." };
-  if (p.categories.length === 0) return { message: "Selecciona pelo menos uma categoria." };
+  if (p.categories.length === 0) return { message: "Seleciona pelo menos uma categoria." };
 
   const { error } = await ctx.supabase
     .from("posts")
@@ -93,7 +93,7 @@ export async function uploadPostImageAction(formData: FormData): Promise<{ succe
   const ctx = await requireAdmin();
   if (!ctx) return { success: false, error: "Sem permissão." };
   const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) return { success: false, error: "Selecciona uma imagem." };
+  if (!(file instanceof File) || file.size === 0) return { success: false, error: "Seleciona uma imagem." };
   if (!file.type.startsWith("image/")) return { success: false, error: "O ficheiro deve ser uma imagem." };
   if (file.size > MAX_IMG) return { success: false, error: "A imagem deve ter no máximo 8 MB." };
 

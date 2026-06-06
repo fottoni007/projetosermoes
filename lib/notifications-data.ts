@@ -1,10 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/current-user";
 import type { Notification } from "@/types/forum";
 
 export async function getUnreadCount(): Promise<number> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return 0;
+  const supabase = await createClient();
   const { count } = await supabase
     .from("notifications")
     .select("id", { count: "exact", head: true })
@@ -14,9 +15,9 @@ export async function getUnreadCount(): Promise<number> {
 }
 
 export async function getNotifications(): Promise<Notification[]> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return [];
+  const supabase = await createClient();
   const { data } = await supabase
     .from("notifications")
     .select("id, topic_id, topic_title, actor_name, read, created_at")

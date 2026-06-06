@@ -4,23 +4,24 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isAdminUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import { getCurrentUser } from "@/lib/current-user";
 import { pastorProfileSchema } from "@/lib/validations";
 import type { PastorProfile, PastorProfileFormState } from "@/types/pastor";
 
 export async function getMyPastorProfile(): Promise<PastorProfile | null> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return null;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("pastor_profiles").select("*").eq("user_id", user.id).maybeSingle();
   return data as PastorProfile | null;
 }
 
 export async function isApprovedPastor(): Promise<boolean> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user) return false;
   if (isAdminUser(user)) return true;
+  const supabase = await createClient();
   const { data } = await supabase
     .from("pastor_profiles").select("status").eq("user_id", user.id).maybeSingle();
   return data?.status === "approved";
@@ -68,16 +69,16 @@ export async function savePastorProfile(
   revalidatePath("/pastores/perfil");
   return {
     message: existing
-      ? "Perfil actualizado. Aguarda nova aprovação."
+      ? "Perfil atualizado. Aguarda nova aprovação."
       : "Perfil submetido. Aguarda aprovação.",
     success: true,
   };
 }
 
 export async function listPendingPastorProfiles(): Promise<PastorProfile[]> {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const user = await getCurrentUser();
   if (!user || !isAdminUser(user)) return [];
+  const supabase = await createClient();
   const { data } = await supabase
     .from("pastor_profiles").select("*").order("created_at", { ascending: true });
   return (data ?? []) as PastorProfile[];

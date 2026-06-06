@@ -23,7 +23,7 @@ function exportCsv(profiles: PastorProfile[]) {
     p.contact_email, p.instagram_url ?? "", p.facebook_url ?? "",
     p.youtube_url ?? "",
     p.status === "approved" ? "Aprovado" : p.status === "pending" ? "Pendente" : "Rejeitado",
-    p.auto_approve_revoked ? "Revogada" : p.status === "approved" ? "Activa" : "—",
+    p.auto_approve_revoked ? "Revogada" : p.status === "approved" ? "Ativa" : "—",
   ]);
 
   const csv = [headers, ...rows]
@@ -128,7 +128,7 @@ export default function AdminPastorsTable({ profiles }: Props) {
                             {p.auto_approve_revoked ? (
                               <><ToggleLeft size={18} className="text-ink/70" /> Revogada</>
                             ) : (
-                              <><ToggleRight size={18} className="text-olive" /> Activa</>
+                              <><ToggleRight size={18} className="text-olive" /> Ativa</>
                             )}
                           </button>
                         ) : (
@@ -181,7 +181,7 @@ export default function AdminPastorsTable({ profiles }: Props) {
                       {p.auto_approve_revoked ? (
                         <><ToggleLeft size={16} className="text-ink/70" /> Auto-aprovação revogada</>
                       ) : (
-                        <><ToggleRight size={16} className="text-olive" /> Auto-aprovação activa</>
+                        <><ToggleRight size={16} className="text-olive" /> Auto-aprovação ativa</>
                       )}
                     </button>
                   </div>

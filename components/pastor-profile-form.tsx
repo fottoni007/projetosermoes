@@ -170,7 +170,7 @@ export default function PastorProfileForm({ existing }: { existing?: PastorProfi
         type="submit"
       >
         <Save size={17} />
-        {isPending ? "A guardar…" : existing ? "Actualizar perfil" : "Submeter perfil"}
+        {isPending ? "A guardar…" : existing ? "Atualizar perfil" : "Submeter perfil"}
       </button>
     </form>
   );

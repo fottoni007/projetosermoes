@@ -31,7 +31,7 @@ export default function ResourcesSection({ items, isAdmin }: Props) {
   }
 
   function handleDelete(id: string) {
-    if (!confirm("Apagar este material? Esta acção é irreversível.")) return;
+    if (!confirm("Apagar este material? Esta ação é irreversível.")) return;
     startTransition(async () => {
       const res = await deleteResourceAction(id);
       if (res.success) router.refresh();

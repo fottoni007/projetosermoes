@@ -11,7 +11,7 @@ export default function RgpdPage() {
           Termos de Privacidade e RGPD
         </h1>
         <p className="mt-3 text-sm leading-6 text-ink/70">
-          Última actualização: 5 de Junho de 2026
+          Última atualização: 5 de Junho de 2026
         </p>
 
         <div className="mt-8 space-y-8 text-ink/75">
@@ -83,9 +83,9 @@ export default function RgpdPage() {
           <section>
             <h2 className="text-xl font-semibold text-ink">7. Conservação dos dados</h2>
             <p className="mt-3 leading-7">
-              Os dados são conservados enquanto a conta estiver activa ou enquanto
+              Os dados são conservados enquanto a conta estiver ativa ou enquanto
               forem necessários para a organização da biblioteca de sermões. O
-              utilizador pode solicitar a actualização, limitação ou eliminação dos
+              utilizador pode solicitar a atualização, limitação ou eliminação dos
               seus dados quando aplicável.
             </p>
           </section>

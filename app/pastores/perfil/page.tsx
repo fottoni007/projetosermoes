@@ -50,7 +50,7 @@ export default async function PastorProfilePage() {
           <div className="mb-6 flex items-start gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
             <CheckCircle className="mt-0.5 shrink-0 text-green-600" size={18} />
             <p className="text-sm text-green-800">
-              O teu perfil está aprovado. Podes submeter e editar sermões. Se actualizares o perfil, precisarás de nova aprovação.
+              O teu perfil está aprovado. Podes submeter e editar sermões. Se atualizares o perfil, precisarás de nova aprovação.
             </p>
           </div>
         )}

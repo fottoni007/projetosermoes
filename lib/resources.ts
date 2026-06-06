@@ -14,7 +14,7 @@ export async function uploadResourceAction(
   const file = formData.get("file");
 
   if (title.length < 2) return { success: false, error: "Indica um título para o recurso." };
-  if (!(file instanceof File) || file.size === 0) return { success: false, error: "Selecciona um ficheiro PDF." };
+  if (!(file instanceof File) || file.size === 0) return { success: false, error: "Seleciona um ficheiro PDF." };
   if (file.type !== "application/pdf") return { success: false, error: "O ficheiro deve ser um PDF." };
   if (file.size > MAX) return { success: false, error: "O PDF deve ter no máximo 25 MB." };
 
