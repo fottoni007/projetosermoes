@@ -20,6 +20,22 @@ export type Sermon = {
   created_by: string;
 };
 
+// Subconjunto leve usado na listagem — evita carregar `notes` (texto longo)
+// de todos os sermões só para renderizar os cartões.
+export type SermonListItem = Pick<
+  Sermon,
+  | "id"
+  | "title"
+  | "preacher_name"
+  | "date"
+  | "biblical_text"
+  | "series_theme"
+  | "sermon_type"
+  | "status"
+  | "ai_summary"
+  | "pdf_path"
+>;
+
 export type SermonFormState = {
   message: string;
   errors?: Record<string, string[]>;

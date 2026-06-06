@@ -9,9 +9,10 @@ type Props = {
   action: () => Promise<{ success: boolean; error?: string }>;
   redirectTo?: string;
   small?: boolean;
+  confirmText?: string;
 };
 
-export default function DeleteForumButton({ action, redirectTo, small }: Props) {
+export default function DeleteForumButton({ action, redirectTo, small, confirmText }: Props) {
   const [confirming, setConfirming] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -34,7 +35,7 @@ export default function DeleteForumButton({ action, redirectTo, small }: Props) 
   if (confirming) {
     return (
       <span className="inline-flex items-center gap-1.5 text-xs">
-        <span className="text-ink/70">Apagar?</span>
+        <span className="text-ink/70">{confirmText ?? "Apagar?"}</span>
         <button onClick={doDelete} disabled={isPending} className="inline-flex items-center rounded-md bg-clay px-2 py-1.5 font-semibold text-white transition hover:bg-clay/90 disabled:opacity-60">
           {isPending ? "…" : "Sim"}
         </button>

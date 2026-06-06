@@ -21,6 +21,18 @@ const config: Config = {
       },
       boxShadow: {
         soft: "0 18px 60px rgba(31, 41, 51, 0.08)"
+      },
+      screens: {
+        xs: "480px"
+      },
+      keyframes: {
+        "toast-in": {
+          from: { opacity: "0", transform: "translateY(8px)" },
+          to: { opacity: "1", transform: "translateY(0)" }
+        }
+      },
+      animation: {
+        "toast-in": "toast-in 200ms ease-out"
       }
     }
   },

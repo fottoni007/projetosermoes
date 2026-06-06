@@ -6,7 +6,7 @@ import { analyzePdf } from "@/lib/ai";
 import { scanPdfBuffer } from "@/lib/virustotal";
 import { createClient } from "@/lib/supabase/server";
 import { sermonSchema } from "@/lib/validations";
-import type { Sermon, SermonFormState } from "@/types/sermon";
+import type { Sermon, SermonFormState, SermonListItem } from "@/types/sermon";
 
 const bucketName = "sermon-pdfs";
 
@@ -42,11 +42,29 @@ export async function getCurrentUser() {
   return user;
 }
 
-export async function listSermons(query?: string) {
+const SERMON_LIST_COLUMNS =
+  "id, title, preacher_name, date, biblical_text, series_theme, sermon_type, status, ai_summary, pdf_path";
+const SERMONS_PER_PAGE = 24;
+
+export type SermonListResult = {
+  sermons: SermonListItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+};
+
+export async function listSermons(query?: string, page = 1): Promise<SermonListResult> {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  let request = supabase.from("sermons").select("*").order("date", { ascending: false });
+  const safePage = Number.isFinite(page) && page > 0 ? Math.floor(page) : 1;
+
+  // Seleciona apenas as colunas mostradas na lista (sem `notes`, que pode ser
+  // muito grande) e pede a contagem total para a paginação.
+  let request = supabase
+    .from("sermons")
+    .select(SERMON_LIST_COLUMNS, { count: "exact" })
+    .order("date", { ascending: false });
 
   if (!isAdminUser(user)) {
     if (user) {
@@ -64,9 +82,17 @@ export async function listSermons(query?: string) {
     );
   }
 
-  const { data, error } = await request;
+  const from = (safePage - 1) * SERMONS_PER_PAGE;
+  request = request.range(from, from + SERMONS_PER_PAGE - 1);
+
+  const { data, error, count } = await request;
   if (error) throw new Error(error.message);
-  return (data ?? []) as Sermon[];
+  return {
+    sermons: (data ?? []) as SermonListItem[],
+    total: count ?? 0,
+    page: safePage,
+    pageSize: SERMONS_PER_PAGE,
+  };
 }
 
 export async function getSermon(id: string) {

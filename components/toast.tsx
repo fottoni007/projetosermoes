@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, X, XCircle } from "lucide-react";
 import { createContext, useCallback, useContext, useState } from "react";
 
 type ToastType = "success" | "error";
@@ -15,11 +15,18 @@ export function useToast() {
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const push = useCallback((message: string, type: ToastType = "success") => {
-    const id = Date.now() + Math.random();
-    setToasts((t) => [...t, { id, message, type }]);
-    setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 4000);
+  const dismiss = useCallback((id: number) => {
+    setToasts((t) => t.filter((x) => x.id !== id));
   }, []);
+
+  const push = useCallback(
+    (message: string, type: ToastType = "success") => {
+      const id = Date.now() + Math.random();
+      setToasts((t) => [...t, { id, message, type }]);
+      setTimeout(() => dismiss(id), 4000);
+    },
+    [dismiss]
+  );
 
   return (
     <ToastContext.Provider value={push}>
@@ -32,7 +39,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={t.id}
             role="status"
-            className={`pointer-events-auto flex items-start gap-2.5 rounded-lg border bg-white px-4 py-3 text-sm shadow-soft ${
+            className={`pointer-events-auto flex animate-toast-in items-start gap-2.5 rounded-lg border bg-white px-4 py-3 text-sm shadow-soft ${
               t.type === "error" ? "border-clay/30" : "border-olive/30"
             }`}
           >
@@ -42,6 +49,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
               <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-olive" />
             )}
             <span className="text-ink/80">{t.message}</span>
+            <button
+              type="button"
+              onClick={() => dismiss(t.id)}
+              aria-label="Fechar notificação"
+              className="-mr-1 ml-auto shrink-0 rounded p-0.5 text-ink/40 transition hover:text-ink/70"
+            >
+              <X size={16} />
+            </button>
           </div>
         ))}
       </div>

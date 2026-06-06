@@ -1,15 +1,15 @@
-import { Calendar, Clock, FileText, Sparkles, UserRound } from "lucide-react";
+import { Calendar, Clock, FileText, Plus, Search, Sparkles, UserRound } from "lucide-react";
 import Link from "next/link";
 import { sermonTypeLabel } from "@/lib/sermon-types";
-import type { Sermon } from "@/types/sermon";
+import type { SermonListItem } from "@/types/sermon";
 
 type SermonListProps = {
-  sermons: Sermon[];
+  sermons: SermonListItem[];
   query?: string;
-  currentUserId?: string;
+  canCreate?: boolean;
 };
 
-export default function SermonList({ sermons, query, currentUserId }: SermonListProps) {
+export default function SermonList({ sermons, query, canCreate }: SermonListProps) {
   if (sermons.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-ink/20 bg-white p-10 text-center">
@@ -21,6 +21,23 @@ export default function SermonList({ sermons, query, currentUserId }: SermonList
             ? "Tenta pesquisar com outras palavras."
             : "Cria o primeiro registo para começar a biblioteca."}
         </p>
+        {query ? (
+          <Link
+            href="/sermoes"
+            className="mt-5 inline-flex items-center gap-1.5 rounded-md border border-ink/15 bg-white px-3 py-2 text-sm font-semibold text-ink transition hover:border-olive/40 hover:text-olive"
+          >
+            <Search size={16} />
+            Limpar pesquisa
+          </Link>
+        ) : canCreate ? (
+          <Link
+            href="/sermoes/novo"
+            className="mt-5 inline-flex items-center gap-1.5 rounded-md bg-olive px-4 py-2 text-sm font-semibold text-white transition hover:bg-olive/90"
+          >
+            <Plus size={16} />
+            Novo sermão
+          </Link>
+        ) : null}
       </div>
     );
   }
@@ -59,7 +76,7 @@ export default function SermonList({ sermons, query, currentUserId }: SermonList
                 {sermon.preacher_name}
               </p>
             </div>
-            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-mist px-2.5 py-1.5 text-xs font-medium text-ink/70 sm:text-sm">
+            <span className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-mist px-2.5 py-1.5 text-xs font-medium tabular-nums text-ink/70 sm:text-sm">
               <Calendar size={13} />
               {new Intl.DateTimeFormat("pt-PT").format(new Date(sermon.date))}
             </span>
